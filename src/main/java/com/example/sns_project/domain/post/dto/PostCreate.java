@@ -1,12 +1,11 @@
-package com.example.sns_project.controller;
+package com.example.sns_project.domain.post.dto;
 
+import com.example.sns_project.domain.post.Post;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Setter
 @Getter
+@Setter
 @ToString
 public class PostCreate {
     @NotEmpty(message = "타이틀을 입력해주세요")
@@ -16,8 +15,16 @@ public class PostCreate {
     @NotEmpty(message = "내용을 입력해주세요")
     private String content;
 
+    @Builder
     public PostCreate(final String title, final String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public Post toEntity() {
+        return Post.builder()
+                .title(this.title)
+                .content(this.content)
+                .build();
     }
 }
