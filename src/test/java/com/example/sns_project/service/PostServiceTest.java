@@ -2,8 +2,10 @@ package com.example.sns_project.service;
 
 import com.example.sns_project.domain.post.Post;
 import com.example.sns_project.domain.post.dto.PostCreate;
+import com.example.sns_project.domain.post.dto.PostOneResponse;
 import com.example.sns_project.domain.post.dto.PostResponseDto;
 import com.example.sns_project.repository.PostRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,5 +48,31 @@ class PostServiceTest {
 
         assertThat(responseDto.getTitle()).isEqualTo("제목");
         assertThat(responseDto.getContent()).isEqualTo("내용");
+    }
+
+    @Test
+    @DisplayName("글 1개 조회")
+    void test() {
+        //given
+        final Post response = Post.builder()
+                .id(1L)
+                .title("Title")
+                .content("Content")
+                .build();
+        final PostOneResponse oneResponse = PostOneResponse.builder()
+                .title("Title")
+                .content("Content")
+                .build();
+
+        // stub
+        given(postRepository.findById(any())).willReturn(Optional.ofNullable(response));
+
+        //when
+        final PostOneResponse postOneResponse = postService.get(response.getId());
+
+        //then
+        assertThat(postOneResponse).isNotNull();
+        assertThat(postOneResponse.getContent()).isEqualTo(oneResponse.getContent());
+        assertThat(postOneResponse.getTitle()).isEqualTo(oneResponse.getTitle());
     }
 }
