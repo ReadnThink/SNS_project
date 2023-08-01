@@ -2,13 +2,11 @@ package com.example.sns_project.controller;
 
 import com.example.sns_project.aop.ex.CustomApiException;
 import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostResponseDto;
-import com.example.sns_project.repository.PostRepository;
+import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
@@ -41,7 +41,7 @@ class PostControllerTest {
     void 작성성공1() throws Exception {
         // when
         PostCreate postCreate = PostCreate.builder().title("제목").content("내용").build();
-        PostResponseDto postResponse = PostResponseDto.builder().title("제목").content("내용").build();
+        PostResponse postResponse = PostResponse.builder().title("제목").content("내용").build();
 
         given(postService.write(any())).willReturn(postResponse);
 
@@ -131,5 +131,38 @@ class PostControllerTest {
                 .andDo(print())
         ;
         verify(postService).get(1L);
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회 성공")
+    void 글_여러개조회성공() throws Exception {
+        final PostResponse request1 = PostResponse.builder()
+                .title("Title1")
+                .content("Content1")
+                .build();
+        final PostResponse request2 = PostResponse.builder()
+                .title("Title2")
+                .content("Content2")
+                .build();
+        final PostResponse request3 = PostResponse.builder()
+                .title("Title3")
+                .content("Content3")
+                .build();
+        final List<PostResponse> posts = Arrays.asList(request1, request2, request3);
+
+        given(postService.getList()).willReturn(posts);
+
+        //when
+        mockMvc.perform(get("/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.message").value("글 리스트 조회를 성공했습니다."))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.size()").value(3))
+                .andDo(print())
+        ;
+        verify(postService).getList();
     }
 }

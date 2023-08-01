@@ -2,10 +2,8 @@ package com.example.sns_project.service;
 
 import com.example.sns_project.domain.post.Post;
 import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostOneResponse;
-import com.example.sns_project.domain.post.dto.PostResponseDto;
+import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.repository.PostRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,11 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -41,7 +38,7 @@ class PostServiceTest {
                 .build();
         given(postRepository.save(any())).willReturn(post);
 
-        final PostResponseDto responseDto = postService.write(PostCreate.builder()
+        final PostResponse responseDto = postService.write(PostCreate.builder()
                 .title("제목")
                 .content("내용")
                 .build());
@@ -59,7 +56,7 @@ class PostServiceTest {
                 .title("Title")
                 .content("Content")
                 .build();
-        final PostOneResponse oneResponse = PostOneResponse.builder()
+        final PostResponse oneResponse = PostResponse.builder()
                 .title("Title")
                 .content("Content")
                 .build();
@@ -68,11 +65,42 @@ class PostServiceTest {
         given(postRepository.findById(any())).willReturn(Optional.ofNullable(response));
 
         //when
-        final PostOneResponse postOneResponse = postService.get(response.getId());
+        final PostResponse postResponse = postService.get(response.getId());
 
         //then
-        assertThat(postOneResponse).isNotNull();
-        assertThat(postOneResponse.getContent()).isEqualTo(oneResponse.getContent());
-        assertThat(postOneResponse.getTitle()).isEqualTo(oneResponse.getTitle());
+        assertThat(postResponse).isNotNull();
+        assertThat(postResponse.getContent()).isEqualTo(oneResponse.getContent());
+        assertThat(postResponse.getTitle()).isEqualTo(oneResponse.getTitle());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test_list() {
+        //given
+        final List<Post> posts = List.of(
+                Post.builder()
+                        .id(1L)
+                        .title("Title1")
+                        .content("Content1")
+                        .build(),
+                Post.builder()
+                        .id(2L)
+                        .title("Title2")
+                        .content("Content2")
+                        .build(),
+                Post.builder()
+                        .id(1L)
+                        .title("Title3")
+                        .content("Content3")
+                        .build()
+        );
+        // stub
+        given(postRepository.findAll()).willReturn(posts);
+
+        //when
+        final List<PostResponse> response = postService.getList();
+
+        //then
+        assertThat(response.size()).isEqualTo(3);
     }
 }

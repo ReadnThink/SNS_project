@@ -1,14 +1,17 @@
 package com.example.sns_project.controller;
 
 import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostOneResponse;
+import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.response.ResponseDto;
 import com.example.sns_project.service.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -31,7 +34,13 @@ public class PostController {
 
     @GetMapping("/posts/{postId}")
     public ResponseEntity<?> get(@PathVariable Long postId) {
-        final PostOneResponse postOneResponse = postService.get(postId);
-        return new ResponseEntity<>(new ResponseDto<>(1, "글 조회에 성공했습니다.", postOneResponse), OK);
+        final PostResponse postResponse = postService.get(postId);
+        return new ResponseEntity<>(new ResponseDto<>(1, "글 조회에 성공했습니다.", postResponse), OK);
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<?> getList() {
+        final List<PostResponse> postList = postService.getList();
+        return new ResponseEntity<>(new ResponseDto<>(1, "글 리스트 조회를 성공했습니다.", postList), HttpStatus.OK);
     }
 }
