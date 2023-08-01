@@ -8,9 +8,7 @@ import lombok.*;
 import org.aspectj.lang.annotation.Aspect;
 
 @Entity
-@Builder
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
@@ -19,4 +17,11 @@ public class Post {
     private Long id;
     private String content;
     private String title;
+
+    @Builder
+    public Post(final Long id, final String content, final String title) {
+        this.id = id;
+        this.content = content;
+        this.title = title;
+    }
 }

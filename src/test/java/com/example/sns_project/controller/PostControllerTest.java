@@ -2,6 +2,7 @@ package com.example.sns_project.controller;
 
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponseDto;
+import com.example.sns_project.repository.PostRepository;
 import com.example.sns_project.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +33,8 @@ class PostControllerTest {
     @MockBean
     PostService postService;
 
+    @MockBean
+    PostRepository postRepository;
 
     @Test
     @DisplayName("/posts 요청성공")
