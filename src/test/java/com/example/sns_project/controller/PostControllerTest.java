@@ -1,6 +1,7 @@
 package com.example.sns_project.controller;
 
 import com.example.sns_project.aop.ex.CustomApiException;
+import com.example.sns_project.domain.post.Post;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.service.PostService;
@@ -11,11 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -118,6 +124,8 @@ class PostControllerTest {
 
         //given
         final CustomApiException customApiException = new CustomApiException("게시글이 존재하지 않습니다");
+
+        //stub
         given(postService.get(postId)).willThrow(customApiException);
 
         //when
@@ -136,21 +144,17 @@ class PostControllerTest {
     @Test
     @DisplayName("글 여러개 조회 성공")
     void 글_여러개조회성공() throws Exception {
-        final PostResponse request1 = PostResponse.builder()
-                .title("Title1")
-                .content("Content1")
-                .build();
-        final PostResponse request2 = PostResponse.builder()
-                .title("Title2")
-                .content("Content2")
-                .build();
-        final PostResponse request3 = PostResponse.builder()
-                .title("Title3")
-                .content("Content3")
-                .build();
-        final List<PostResponse> posts = Arrays.asList(request1, request2, request3);
-
-        given(postService.getList()).willReturn(posts);
+        //given
+        List<PostResponse> requestPosts = IntStream.range(1, 11)
+                .mapToObj(i -> {
+                    return PostResponse.builder()
+                            .title("Title " + i)
+                            .content("Content " + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        //stub
+        given(postService.getList(any())).willReturn(requestPosts);
 
         //when
         mockMvc.perform(get("/posts")
@@ -160,9 +164,9 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.message").value("글 리스트 조회를 성공했습니다."))
                 .andExpect(jsonPath("$.data").isArray())
-                .andExpect(jsonPath("$.data.size()").value(3))
+                .andExpect(jsonPath("$.data.size()").value(10))
                 .andDo(print())
         ;
-        verify(postService).getList();
+        verify(postService).getList(any());
     }
 }

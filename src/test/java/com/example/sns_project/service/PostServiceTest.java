@@ -4,16 +4,21 @@ import com.example.sns_project.domain.post.Post;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.repository.PostRepository;
+import com.example.sns_project.request.PostSearch;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -74,33 +79,25 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회")
+    @DisplayName("글 1페이지 조회")
     void test_list() {
         //given
-        final List<Post> posts = List.of(
-                Post.builder()
-                        .id(1L)
-                        .title("Title1")
-                        .content("Content1")
-                        .build(),
-                Post.builder()
-                        .id(2L)
-                        .title("Title2")
-                        .content("Content2")
-                        .build(),
-                Post.builder()
-                        .id(1L)
-                        .title("Title3")
-                        .content("Content3")
-                        .build()
-        );
+        List<Post> response = IntStream.range(1, 6)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("Title " + i)
+                            .content("Content " + i)
+                            .build();
+                })
+                .collect(Collectors.toList());
         // stub
-        given(postRepository.findAll()).willReturn(posts);
+        given(postRepository.getList(any())).willReturn(response);
 
         //when
-        final List<PostResponse> response = postService.getList();
+        PostSearch postSearch = new PostSearch();
+        final List<PostResponse> list = postService.getList(postSearch);
 
         //then
-        assertThat(response.size()).isEqualTo(3);
+        assertThat(list.size()).isEqualTo(5);
     }
 }
