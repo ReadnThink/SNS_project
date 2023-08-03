@@ -1,4 +1,4 @@
-package com.example.sns_project.domain.post.dto;
+package com.example.sns_project.response;
 
 import com.example.sns_project.domain.post.Post;
 import lombok.Builder;

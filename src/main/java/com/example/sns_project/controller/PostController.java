@@ -1,15 +1,13 @@
 package com.example.sns_project.controller;
 
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.request.PostCreate;
+import com.example.sns_project.request.PostEdit;
+import com.example.sns_project.response.PostResponse;
 import com.example.sns_project.request.PostSearch;
 import com.example.sns_project.response.ResponseDto;
 import com.example.sns_project.service.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +42,12 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<?> getList(@ModelAttribute PostSearch postSearch) {
         final List<PostResponse> postList = postService.getList(postSearch);
-        return new ResponseEntity<>(new ResponseDto<>(1, "글 리스트 조회를 성공했습니다.", postList), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>(1, "글 리스트 조회를 성공했습니다.", postList), OK);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public ResponseEntity<?> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
+        postService.edit(postId, postEdit);
+        return new ResponseEntity<>(new ResponseDto<>(1, "글 수정을 성공했습니다.", null), OK);
     }
 }

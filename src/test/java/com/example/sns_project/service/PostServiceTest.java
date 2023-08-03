@@ -1,8 +1,9 @@
 package com.example.sns_project.service;
 
 import com.example.sns_project.domain.post.Post;
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.request.PostCreate;
+import com.example.sns_project.request.PostEdit;
+import com.example.sns_project.response.PostResponse;
 import com.example.sns_project.repository.PostRepository;
 import com.example.sns_project.request.PostSearch;
 import org.junit.jupiter.api.DisplayName;
@@ -11,14 +12,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -94,10 +93,28 @@ class PostServiceTest {
         given(postRepository.getList(any())).willReturn(response);
 
         //when
-        PostSearch postSearch = new PostSearch();
+        PostSearch postSearch = PostSearch.builder().build();
         final List<PostResponse> list = postService.getList(postSearch);
 
         //then
         assertThat(list.size()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("글 수정 성공")
+    void test_edit() {
+        //given
+        final Post post = Post.builder()
+                .id(1L)
+                .title("Title")
+                .content("Content")
+                .build();
+
+        //when
+        post.change("제목수정","내용수정");
+
+        //then
+        assertThat(post.getTitle()).isEqualTo("제목수정");
+        assertThat(post.getContent()).isEqualTo("내용수정");
     }
 }

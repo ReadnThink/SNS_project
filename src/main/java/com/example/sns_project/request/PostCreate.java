@@ -1,4 +1,4 @@
-package com.example.sns_project.domain.post.dto;
+package com.example.sns_project.request;
 
 import com.example.sns_project.domain.post.Post;
 import jakarta.validation.constraints.*;
