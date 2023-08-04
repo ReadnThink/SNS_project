@@ -1,9 +1,9 @@
 package com.example.sns_project.controller;
 
 import com.example.sns_project.aop.ex.CustomApiException;
-import com.example.sns_project.domain.post.Post;
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.request.PostCreate;
+import com.example.sns_project.request.PostEdit;
+import com.example.sns_project.response.PostResponse;
 import com.example.sns_project.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -12,13 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -26,8 +22,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,5 +163,27 @@ class PostControllerTest {
                 .andDo(print())
         ;
         verify(postService).getList(any());
+    }
+
+    @Test
+    @DisplayName("글 수정 성공")
+    void 글_수정() throws Exception {
+        //given
+        final PostEdit request = PostEdit.builder()
+                .title("수정")
+                .content("수정")
+                .build();
+        //when
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(request))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.message").value("글 수정을 성공했습니다."))
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andDo(print())
+        ;
+        verify(postService).edit(any(), any());
     }
 }
