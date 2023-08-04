@@ -186,4 +186,20 @@ class PostControllerTest {
         ;
         verify(postService).edit(any(), any());
     }
+
+    @Test
+    @DisplayName("글 삭제 성공")
+    void 글_삭제() throws Exception {
+        //when
+        mockMvc.perform(delete("/posts/{postId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.message").value("글 삭제를 성공했습니다."))
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andDo(print())
+        ;
+        verify(postService).delete(any());
+    }
 }
