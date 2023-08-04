@@ -117,4 +117,5 @@ class PostServiceTest {
         assertThat(post.getTitle()).isEqualTo("제목수정");
         assertThat(post.getContent()).isEqualTo("내용수정");
     }
+
 }

@@ -50,4 +50,10 @@ public class PostController {
         postService.edit(postId, postEdit);
         return new ResponseEntity<>(new ResponseDto<>(1, "글 수정을 성공했습니다.", null), OK);
     }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<?> delete(@PathVariable Long postId) {
+        postService.delete(postId);
+        return new ResponseEntity<>(new ResponseDto<>(1, "글 삭제를 성공했습니다.", null), OK);
+    }
 }
