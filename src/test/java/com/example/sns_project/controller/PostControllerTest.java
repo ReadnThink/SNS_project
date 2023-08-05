@@ -1,6 +1,7 @@
 package com.example.sns_project.controller;
 
-import com.example.sns_project.aop.ex.CustomApiException;
+import com.example.sns_project.exception.CustomApiException;
+import com.example.sns_project.exception.PostNotFound;
 import com.example.sns_project.request.PostCreate;
 import com.example.sns_project.request.PostEdit;
 import com.example.sns_project.response.PostResponse;
@@ -118,7 +119,7 @@ class PostControllerTest {
         Long postId = 1L;
 
         //given
-        final CustomApiException customApiException = new CustomApiException("게시글이 존재하지 않습니다");
+        final CustomApiException customApiException = new PostNotFound();
 
         //stub
         given(postService.get(postId)).willThrow(customApiException);
@@ -127,9 +128,9 @@ class PostControllerTest {
         mockMvc.perform(get("/posts/{postId}", postId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(-1))
-                .andExpect(jsonPath("$.message").value("게시글이 존재하지 않습니다"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(404))
+                .andExpect(jsonPath("$.message").value("존재하지 않는 글입니다."))
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andDo(print())
         ;

@@ -1,4 +1,4 @@
-package com.example.sns_project.aop.ex;
+package com.example.sns_project.exception;
 
 import lombok.Builder;
 import lombok.Getter;

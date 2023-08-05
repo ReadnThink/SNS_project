@@ -1,6 +1,6 @@
 package com.example.sns_project.aop;
 
-import com.example.sns_project.aop.ex.CustomValidationException;
+import com.example.sns_project.exception.CustomValidationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
