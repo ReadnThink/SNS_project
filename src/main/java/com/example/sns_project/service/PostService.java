@@ -1,6 +1,6 @@
 package com.example.sns_project.service;
 
-import com.example.sns_project.aop.ex.CustomApiException;
+import com.example.sns_project.exception.PostNotFound;
 import com.example.sns_project.request.PostCreate;
 import com.example.sns_project.domain.post.Post;
 import com.example.sns_project.request.PostEdit;
@@ -30,9 +30,7 @@ public class PostService {
     }
 
     public PostResponse get(final Long postId) {
-        final Post post = postRepository.findById(postId).orElseThrow(
-                () -> new CustomApiException("존재하지 않는 글입니다.")
-        );
+        final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
                 .title(post.getTitle())
@@ -48,15 +46,13 @@ public class PostService {
 
     @Transactional
     public void edit(Long id, PostEdit postEdit) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new CustomApiException("존재하지 않는 글입니다."));
+        Post post = postRepository.findById(id).orElseThrow((PostNotFound::new));
 
         post.change(postEdit.getTitle(), postEdit.getContent());
     }
 
     public void delete(final Long postId) {
-        final Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomApiException("존재하지 않는 글입니다."));
+        final Post post = postRepository.findById(postId).orElseThrow((PostNotFound::new));
 
         postRepository.delete(post);
     }

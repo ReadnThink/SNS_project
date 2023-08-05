@@ -1,4 +1,4 @@
-package com.example.sns_project.config.querydsl;
+package com.example.sns_project.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
