@@ -97,6 +97,26 @@ class PostControllerTest {
     }
 
     @Test
+    @DisplayName("/posts 요청시 글의 제목/내용은 '바보' 가 포함되면 안됨")
+    void 작성실패3() throws Exception {
+        PostCreate postCreate = PostCreate.builder()
+                .title("안녕하세요 바보님")
+                .content("내용")
+                .build();
+
+        mockMvc.perform(post("/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsBytes(postCreate))
+                )
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.title").value("제목에 바보를 포함할 수 없습니다."))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+        ;
+    }
+
+    @Test
     @DisplayName("글 1개 조회 성공")
     void 조회성공1() throws Exception {
         Long postId = 1L;

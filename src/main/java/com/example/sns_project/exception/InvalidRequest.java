@@ -8,6 +8,11 @@ public class InvalidRequest extends CustomApiException{
         super(MESSAGE);
     }
 
+    public InvalidRequest(String fieldName, String message) {
+        super(MESSAGE);
+        addValidation(fieldName, message);
+    }
+
     @Override
     public int statusCode() {
         return 400;

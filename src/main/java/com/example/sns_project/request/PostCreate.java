@@ -1,6 +1,7 @@
 package com.example.sns_project.request;
 
 import com.example.sns_project.domain.post.Post;
+import com.example.sns_project.exception.InvalidRequest;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -26,5 +27,12 @@ public class PostCreate {
                 .title(this.title)
                 .content(this.content)
                 .build();
+    }
+
+    public void isValid() {
+        if (this.title.contains("바보")) {
+            throw new InvalidRequest("title", "제목에 바보를 포함할 수 없습니다.");
+        }
+
     }
 }
