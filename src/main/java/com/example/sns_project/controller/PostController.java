@@ -1,5 +1,6 @@
 package com.example.sns_project.controller;
 
+import com.example.sns_project.config.data.UserSession;
 import com.example.sns_project.request.PostCreate;
 import com.example.sns_project.request.PostEdit;
 import com.example.sns_project.response.PostResponse;
@@ -24,6 +25,18 @@ public class PostController {
 
     public PostController(final PostService postService) {
         this.postService = postService;
+    }
+
+    // 임시 라우터
+    @GetMapping("/foo")
+    public long test(UserSession userSession) {
+        log.info("디버그 : {}", userSession.getId());
+        return userSession.getId();
+    }
+
+    @GetMapping("/bar")
+    public String test1() {
+        return "인증이 필요 없는 페이지";
     }
 
     @PostMapping("/posts")

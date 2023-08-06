@@ -501,9 +501,9 @@ Host: api.board.com</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 101
+Content-Length: 119
 
-{"code":1,"message":"글 조회에 성공했습니다.","data":{"title":"제목","content":"내용"}}</code></pre>
+{"code":1,"message":"글 조회에 성공했습니다.","data":{"title":"제목","content":"내용"},"validation":null}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -539,6 +539,11 @@ Content-Length: 101
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>validation</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
 </tr>
 </tbody>
 </table>
@@ -602,9 +607,9 @@ Host: api.board.com
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 68
+Content-Length: 86
 
-{"code":1,"message":"글 작성을 성공했습니다.","data":null}</code></pre>
+{"code":1,"message":"글 작성을 성공했습니다.","data":null,"validation":null}</code></pre>
 </div>
 </div>
 </div>
@@ -614,7 +619,7 @@ Content-Length: 68
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-05 23:43:00 +0900
+Last updated 2023-08-06 23:14:45 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
