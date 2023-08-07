@@ -1,0 +1,16 @@
+### 로그인
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+// data.sql에 회원가입 되어있음
+{
+  "email": "kent@gmail.com",
+  "password": "1234"
+}
+
+### 인증 페이지 요청
+
+GET http://localhost:8080/foo
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjkxMzMzMjMzfQ.PXfyOgGAbTUP2z5Jtixbb2KpLqxoeTDZWVpqqZjlEBM

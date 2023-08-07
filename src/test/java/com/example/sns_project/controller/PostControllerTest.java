@@ -39,7 +39,7 @@ class PostControllerTest {
     PostService postService;
 
     @Test
-    @DisplayName("/posts 작성 성공")
+    @DisplayName("글 작성 - 성공")
     void 작성성공1() throws Exception {
         // when
         PostCreate postCreate = PostCreate.builder().title("제목").content("내용").build();
@@ -48,6 +48,7 @@ class PostControllerTest {
         given(postService.write(any())).willReturn(postResponse);
 
         mockMvc.perform(post("/posts")
+                        .header("authorization", "kent")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
@@ -58,7 +59,7 @@ class PostControllerTest {
         ;
     }
     @Test
-    @DisplayName("/posts 요청시 title 필수")
+    @DisplayName("글 작성 - title 필수")
     void 작성실패1() throws Exception {
         PostCreate postCreate = PostCreate.builder()
                 .title("")
@@ -77,7 +78,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 글의 제목은 30자 이내여야 함")
+    @DisplayName("글 작성 - 글의 제목은 30자 이내여야 함")
     void 작성실패2() throws Exception {
         PostCreate postCreate = PostCreate.builder()
                 .title("내용은 30글자 이내로 입력 가능합니다.내용은 30글자 이내로 입력 가능합니다.내용은 30글자 이내로 입력 가능합니다.내용은 30글자 이내로 입력 가능합니다.")
@@ -97,7 +98,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 글의 제목/내용은 '바보' 가 포함되면 안됨")
+    @DisplayName("글 작성 - 글의 제목/내용은 '바보' 가 포함되면 안됨")
     void 작성실패3() throws Exception {
         PostCreate postCreate = PostCreate.builder()
                 .title("안녕하세요 바보님")
@@ -117,7 +118,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 1개 조회 성공")
+    @DisplayName("글 1개 조회 - 성공")
     void 조회성공1() throws Exception {
         Long postId = 1L;
         //when
@@ -134,7 +135,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 1개 조회 실패")
+    @DisplayName("글 1개 조회 - 실패")
     void 조회실패() throws Exception {
         Long postId = 1L;
 
@@ -158,7 +159,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 여러개 조회 성공")
+    @DisplayName("글 여러개 조회 - 성공")
     void 글_여러개조회성공() throws Exception {
         //given
         List<PostResponse> requestPosts = IntStream.range(1, 11)
@@ -187,7 +188,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 수정 성공")
+    @DisplayName("글 수정 - 성공")
     void 글_수정() throws Exception {
         //given
         final PostEdit request = PostEdit.builder()
@@ -209,7 +210,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 삭제 성공")
+    @DisplayName("글 삭제 - 성공")
     void 글_삭제() throws Exception {
         //when
         mockMvc.perform(delete("/posts/{postId}", 1L)
