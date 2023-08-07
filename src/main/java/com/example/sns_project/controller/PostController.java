@@ -26,7 +26,6 @@ public class PostController {
         this.postService = postService;
     }
 
-
     @PostMapping("/posts")
     public ResponseEntity<?> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult) {
         postCreate.isValid();

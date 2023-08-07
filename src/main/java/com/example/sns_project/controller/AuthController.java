@@ -7,6 +7,7 @@ import com.example.sns_project.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,6 @@ public class AuthController {
     private final AuthService authService;
     private final AppConfig appConfig;
 
-
     @PostMapping("/auth/signup")
     public ResponseEntity<ResponseDto<Object>> signUp(@RequestBody SignUp signUp) {
         authService.signUp(signUp);
@@ -35,4 +35,5 @@ public class AuthController {
                 .message("회원가입을 성공했습니다.")
                 .build(), OK);
     }
+
 }

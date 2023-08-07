@@ -5,6 +5,7 @@ import com.example.sns_project.exception.AlreadyExistsEmailException;
 import com.example.sns_project.repository.UserRepository;
 import com.example.sns_project.request.SignUp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public void signUp(final SignUp signUp) {
@@ -24,7 +26,7 @@ public class AuthService {
 
         var user = User.builder()
                 .name(signUp.getName())
-                .password(signUp.getPassword())
+                .password(passwordEncoder.encode(signUp.getPassword()))
                 .email(signUp.getEmail())
                 .build();
 
