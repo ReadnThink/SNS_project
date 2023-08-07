@@ -1,1 +1,0 @@
-INSERT INTO `user` (name, email, password, created_at, updated_at) values ('kent', 'kent@gmail.com', '1234', '2022-01-01 11:22', '2022-01-01 11:22')
