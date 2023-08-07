@@ -57,7 +57,7 @@ public class PostController {
                 .build(), OK);
     }
 
-    @PatchMapping("/posts/{postId}")
+    @PostMapping("/posts/{postId}")
     public ResponseEntity<?> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
         postService.edit(postId, postEdit);
         return new ResponseEntity<>(ResponseDto.builder()
