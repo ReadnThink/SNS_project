@@ -25,9 +25,6 @@ public class User extends BaseEntity {
 
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Session> sessions = new ArrayList<>();
-
     @Builder
     public User(final Long id, final String name, final String email, final String password) {
         this.id = id;
@@ -37,11 +34,4 @@ public class User extends BaseEntity {
         this.getCreatedAt();
     }
 
-    public Session addSession() {
-        final Session session = Session.builder()
-                .user(this)
-                .build();
-        sessions.add(session);
-        return session;
-    }
 }
