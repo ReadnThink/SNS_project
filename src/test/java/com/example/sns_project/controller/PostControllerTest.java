@@ -196,7 +196,7 @@ class PostControllerTest {
                 .content("수정")
                 .build();
         //when
-        mockMvc.perform(patch("/posts/{postId}", 1L)
+        mockMvc.perform(post("/posts/{postId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(request))
                 )
