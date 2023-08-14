@@ -1,11 +1,11 @@
 package com.example.sns_project.service;
 
-import com.example.sns_project.domain.post.Post;
-import com.example.sns_project.request.PostCreate;
-import com.example.sns_project.request.PostEdit;
-import com.example.sns_project.response.PostResponse;
-import com.example.sns_project.repository.PostRepository;
-import com.example.sns_project.request.PostSearch;
+import com.example.sns_project.domain.post.application.PostService;
+import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.dto.PostCreate;
+import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.domain.post.dao.PostRepository;
+import com.example.sns_project.domain.post.dto.PostSearch;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
