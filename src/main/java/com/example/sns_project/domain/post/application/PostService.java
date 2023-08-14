@@ -1,12 +1,14 @@
 package com.example.sns_project.domain.post.application;
 
-import com.example.sns_project.domain.post.exception.PostNotFound;
+import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.dto.PostSearch;
+import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.exception.PostNotFound;
+import com.example.sns_project.domain.user.dao.UserRepository;
+import com.example.sns_project.domain.user.exception.UserNotFound;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +21,33 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(final PostRepository postRepository) {
+    public PostService(final PostRepository postRepository, final UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
-    public PostResponse write(PostCreate postCreate) {
-        final Post post = postRepository.save(postCreate.toEntity());
-        return new PostResponse(post.getTitle(), post.getContent());
+    public PostResponse write(PostCreate postCreate, final Long userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+        var post = postRepository.save(postCreate.toEntity());
+
+        post.addUser(user);
+        post.isValid();
+
+        return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
     }
 
     public PostResponse get(final Long postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
@@ -45,15 +60,27 @@ public class PostService {
     }
 
     @Transactional
-    public void edit(Long id, PostEdit postEdit) {
-        Post post = postRepository.findById(id).orElseThrow((PostNotFound::new));
+    public void edit(Long id, PostEdit postEdit, Long userId) {
+        var post = postRepository.findById(id)
+                .orElseThrow(PostNotFound::new);
 
+        validateUserExists(userId);
+        post.isSameUser(userId);
         post.change(postEdit.getTitle(), postEdit.getContent());
     }
 
-    public void delete(final Long postId) {
-        final Post post = postRepository.findById(postId).orElseThrow((PostNotFound::new));
+    public void delete(final Long postId, Long userId) {
+        var post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
+        validateUserExists(userId);
+        post.isSameUser(userId);
 
         postRepository.delete(post);
+    }
+
+    private void validateUserExists(final Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
     }
 }

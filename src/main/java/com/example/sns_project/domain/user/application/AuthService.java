@@ -1,10 +1,10 @@
 package com.example.sns_project.domain.user.application;
 
+import com.example.sns_project.domain.user.dao.UserRepository;
+import com.example.sns_project.domain.user.dto.SignUp;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserRole;
 import com.example.sns_project.domain.user.exception.AlreadyExistsEmailException;
-import com.example.sns_project.domain.user.dao.UserRepository;
-import com.example.sns_project.domain.user.dto.SignUp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

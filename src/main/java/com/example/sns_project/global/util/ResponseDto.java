@@ -1,8 +1,6 @@
 package com.example.sns_project.global.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 
 @Builder
 public record ResponseDto<T>(String message, T data) {
@@ -29,7 +27,7 @@ public record ResponseDto<T>(String message, T data) {
 
     public static <T> ResponseDto<T> error(String message, T data) {
         return ResponseDto.<T>builder()
-                .message("ERROR")
+                .message(message)
                 .data(data)
                 .build();
     }

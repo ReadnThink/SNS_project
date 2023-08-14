@@ -3,18 +3,18 @@ package com.example.sns_project.domain.user.exception;
 import com.example.sns_project.global.exception.CustomApiException;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-public class UnAuthorized extends CustomApiException {
+public class UserNotFound extends CustomApiException {
 
-    private static final String MESSAGE = "인증이 필요합니다.";
+    private static final String MESSAGE = "존재하지 않는 이메일 입니다.";
 
-    public UnAuthorized() {
+    public UserNotFound() {
         super(MESSAGE);
     }
 
     @Override
     public HttpStatus getStatus() {
-        return UNAUTHORIZED;
+        return NOT_FOUND;
     }
 }

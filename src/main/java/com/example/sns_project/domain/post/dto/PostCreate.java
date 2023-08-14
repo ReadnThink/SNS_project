@@ -2,8 +2,12 @@ package com.example.sns_project.domain.post.dto;
 
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.exception.InvalidRequest;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -27,12 +31,5 @@ public class PostCreate {
                 .title(this.title)
                 .content(this.content)
                 .build();
-    }
-
-    public void isValid() {
-        if (this.title.contains("바보")) {
-            throw new InvalidRequest();
-        }
-
     }
 }
