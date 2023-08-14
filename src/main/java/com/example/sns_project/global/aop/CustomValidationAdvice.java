@@ -1,9 +1,12 @@
 package com.example.sns_project.global.aop;
 
+import com.example.sns_project.global.exception.BindingException;
 import com.example.sns_project.global.exception.CustomValidationException;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -25,22 +28,15 @@ public class CustomValidationAdvice {
 
     }
 
-    @Around("postMapping() || putMapping()")
-    public Object validationAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Object[] args = proceedingJoinPoint.getArgs();
-        for (Object arg : args) {
-            if(arg instanceof BindingResult){
-                BindingResult bindingResult = (BindingResult) arg;
-
-                if(bindingResult.hasErrors()){
-                    Map<String, String> errorMap = new HashMap<>();
-                    for (FieldError error : bindingResult.getFieldErrors()){
-                        errorMap.put(error.getField(), error.getDefaultMessage());
-                    }
-                    throw new CustomValidationException("유효성검사 실패", errorMap);
+    @Before("postMapping() || putMapping()")
+    public void before(JoinPoint joinPoint) {
+        for (Object arg : joinPoint.getArgs()) {
+            if (arg instanceof BindingResult) {
+                BindingResult br = (BindingResult) arg;
+                if (br.hasErrors()) {
+                    throw new BindingException(br.getFieldError().getDefaultMessage());
                 }
             }
         }
-        return proceedingJoinPoint.proceed();
     }
 }

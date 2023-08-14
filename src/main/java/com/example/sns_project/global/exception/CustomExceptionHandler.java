@@ -22,14 +22,12 @@ public class CustomExceptionHandler {
                 .build(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CustomValidationException.class)
-    public ResponseEntity<?> validationApiException(CustomValidationException e) {
-        log.info("디버그 : {}",e.getMessage());
-//        return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage(), e.getErrorMap()), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(BindingException.class)
+    public ResponseEntity<?> validationApiException(BindingException e) {
         return new ResponseEntity<>(ResponseDto.builder()
                 .code(-1)
                 .message(e.getMessage())
-                .data(e.getErrorMap())
+                .data("")
                 .build(), HttpStatus.BAD_REQUEST);
     }
 }
