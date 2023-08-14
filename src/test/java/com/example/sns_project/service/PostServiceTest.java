@@ -1,17 +1,22 @@
 package com.example.sns_project.service;
 
 import com.example.sns_project.domain.post.application.PostService;
-import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.dto.PostSearch;
+import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.user.dao.UserRepository;
+import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.exception.UserNotFound;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -30,25 +37,60 @@ class PostServiceTest {
 
     @Mock
     PostRepository postRepository;
+    @Mock
+    UserRepository userRepository;
+    User user;
+    Post post;
+    PostCreate postCreate;
+    @BeforeEach
+    void setUp() {
+        user = User.builder()
+                .id(1L)
+                .email("wanted@wanted.com")
+                .password("12341234")
+                .build();
 
-    @Test
-    @DisplayName("글 작성 성공")
-    void test1() {
-
-        final Post post = Post.builder()
+        post = Post.builder()
+                .user(user)
                 .id(1L)
                 .title("제목")
                 .content("내용")
                 .build();
-        given(postRepository.save(any())).willReturn(post);
 
-        final PostResponse responseDto = postService.write(PostCreate.builder()
+        postCreate = PostCreate.builder()
                 .title("제목")
                 .content("내용")
-                .build());
+                .build();
+
+    }
+    @Test
+    @DisplayName("글 작성 성공")
+    void test1() {
+
+        given(postRepository.save(any())).willReturn(post);
+        given(userRepository.findById(any())).willReturn(Optional.ofNullable(user));
+
+        var responseDto = postService.write(PostCreate.builder()
+                .title("제목")
+                .content("내용")
+                .build(), 1L);
 
         assertThat(responseDto.getTitle()).isEqualTo("제목");
         assertThat(responseDto.getContent()).isEqualTo("내용");
+    }
+
+    @Test
+    @DisplayName("글 작성 실패")
+    void tes_실패1() {
+
+        given(userRepository.findById(any())).willThrow(new UserNotFound());
+
+        //when
+        UserNotFound exception = assertThrows(UserNotFound.class, () -> postService.write(postCreate,1L));
+
+        //then
+        assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
+        assertEquals(exception.getMessage(), "존재하지 않는 이메일 입니다.");
     }
 
     @Test

@@ -7,7 +7,6 @@ import com.example.sns_project.global.config.handler.Http401Handler;
 import com.example.sns_project.global.config.handler.Http403Handler;
 import com.example.sns_project.global.config.jwt.JwtAuthenticationFilter;
 import com.example.sns_project.global.config.jwt.JwtAuthorizationFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

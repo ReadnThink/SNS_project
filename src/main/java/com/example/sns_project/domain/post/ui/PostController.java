@@ -5,16 +5,16 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.dto.PostSearch;
+import com.example.sns_project.global.config.auth.LoginUser;
 import com.example.sns_project.global.util.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
 @RestController
@@ -26,11 +26,13 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/posts")
-    public ResponseEntity<ResponseDto<String>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult) {
-        postCreate.isValid();
-        postService.write(postCreate);
-        return ResponseEntity.ok(ResponseDto.success());
+    @PostMapping("/auth/posts")
+    public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
+            , @AuthenticationPrincipal LoginUser loginUser)
+    {
+
+        final PostResponse write = postService.write(postCreate, loginUser.getUser().getId());
+        return ResponseEntity.ok(ResponseDto.success(write));
     }
 
     @GetMapping("/posts/{postId}")
@@ -47,15 +49,17 @@ public class PostController {
         return ResponseEntity.ok(ResponseDto.success(postList));
     }
 
-    @PostMapping("/posts/{postId}")
-    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
+    @PostMapping("/auth/posts/{postId}")
+    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit
+            , @AuthenticationPrincipal LoginUser loginUser)
+    {
         postService.edit(postId, postEdit);
 
         return ResponseEntity.ok(ResponseDto.success());
     }
 
-    @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long postId) {
+    @DeleteMapping("/auth/posts/{postId}")
+    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long postId, @AuthenticationPrincipal LoginUser loginUser) {
         postService.delete(postId);
 
         return ResponseEntity.ok(ResponseDto.success());
