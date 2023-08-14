@@ -66,7 +66,10 @@ public class PostService {
 
         validateUserExists(userId);
         post.isSameUser(userId);
-        post.change(postEdit.getTitle(), postEdit.getContent());
+        post.change(
+                postEdit.title(),
+                postEdit.content()
+        );
     }
 
     public void delete(final Long postId, Long userId) {
