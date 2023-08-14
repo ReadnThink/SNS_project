@@ -60,7 +60,7 @@ public class PostController {
 
     @DeleteMapping("/auth/posts/{postId}")
     public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long postId, @AuthenticationPrincipal LoginUser loginUser) {
-        postService.delete(postId);
+        postService.delete(postId, loginUser.getUser().getId());
 
         return ResponseEntity.ok(ResponseDto.success());
     }

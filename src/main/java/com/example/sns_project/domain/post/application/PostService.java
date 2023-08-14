@@ -69,14 +69,18 @@ public class PostService {
         post.change(postEdit.getTitle(), postEdit.getContent());
     }
 
+    public void delete(final Long postId, Long userId) {
+        var post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
+
+        validateUserExists(userId);
+        post.isSameUser(userId);
+
+        postRepository.delete(post);
+    }
+
     private void validateUserExists(final Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
-    }
-
-    public void delete(final Long postId) {
-        final Post post = postRepository.findById(postId).orElseThrow((PostNotFound::new));
-
-        postRepository.delete(post);
     }
 }

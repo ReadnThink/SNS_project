@@ -185,4 +185,32 @@ class PostServiceTest {
         assertEquals("해당 단어는 포함될 수 없습니다.", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("글 삭제 성공")
+    void test_delete() {
+        /**
+         * 서비스의 다른 로직은 JpaRepository 로직이므로 테스트 할 필요가 없다고 판단
+         * 예외가 터지지 않으면 테스트는 성공
+         */
+
+        //when
+        post.isSameUser(1L);
+    }
+
+    @Test
+    @DisplayName("글 삭제 실패")
+    void test_delete1() {
+
+        /**
+         * 서비스의 다른 로직은 JpaRepository 로직이므로 테스트 할 필요가 없다고 판단
+         * 예외가 터지지 않으면 테스트는 성공
+         */
+
+        //when
+        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(2L));
+
+        //then
+        assertEquals(exception.getStatus(), HttpStatus.FORBIDDEN);
+        assertEquals(exception.getMessage(), "게시글을 수정/삭제는 게시글 작성자만 가능합니다.");
+    }
 }

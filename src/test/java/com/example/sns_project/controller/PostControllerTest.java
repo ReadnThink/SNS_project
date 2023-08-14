@@ -31,6 +31,7 @@ import static com.example.sns_project.config.PostUrl.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.verify;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -67,6 +68,7 @@ class PostControllerTest {
                 .build();
 
         var postResponse = PostResponse.builder()
+                .id(1L)
                 .title("제목")
                 .content("내용")
                 .build();
@@ -74,12 +76,14 @@ class PostControllerTest {
         given(postService.write(any(),any())).willReturn(postResponse);
 
         mockMvc.perform(post(POST_CREATE_URL.getValue())
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsString(postCreate))
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
-                .andExpect(jsonPath("$.data").isEmpty())
+                .andExpect(jsonPath("$.data.id").value(1L))
+                .andExpect(jsonPath("$.data.title").value("제목"))
+                .andExpect(jsonPath("$.data.content").value("내용"))
                 .andDo(print())
         ;
     }
@@ -93,7 +97,7 @@ class PostControllerTest {
                 .content("내용")
                 .build();
         mockMvc.perform(post(POST_CREATE_URL.getValue())
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(status().isBadRequest())
@@ -112,7 +116,7 @@ class PostControllerTest {
                 .build();
 
         mockMvc.perform(post(POST_CREATE_URL.getValue())
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(status().isBadRequest())
@@ -131,7 +135,7 @@ class PostControllerTest {
                 .build();
 
         mockMvc.perform(post(POST_CREATE_URL.getValue())
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(status().isForbidden())
@@ -218,7 +222,7 @@ class PostControllerTest {
                 .build();
         //when
         mockMvc.perform(post(POST_EDIT_URL.getValue(), 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
@@ -239,7 +243,7 @@ class PostControllerTest {
                 .build();
         //when
         mockMvc.perform(patch(POST_EDIT_URL.getValue(), 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsString(request))
                 )
                 .andExpect(status().isForbidden())
@@ -249,7 +253,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 삭제 - 성공")
+    @DisplayName("글 삭제 성공")
+    @WithUserDetails(value = "sns@sns.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void 글_삭제() throws Exception {
         //when
         mockMvc.perform(delete(POST_DELETE_URL.getValue(), 1L)
@@ -260,7 +265,21 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andDo(print())
         ;
-        verify(postService).delete(any());
+        verify(postService).delete(any(), any());
+    }
+
+    @Test
+    @DisplayName("글 삭제 실패 - 로그인하지 않음")
+    void 글_삭제1() throws Exception {
+        //when
+        mockMvc.perform(delete(POST_DELETE_URL.getValue(), 1L)
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("권한이 없습니다."))
+                .andExpect(jsonPath("$.data").isEmpty())
+                .andDo(print())
+        ;
     }
 
     private void saveMockUser() {
