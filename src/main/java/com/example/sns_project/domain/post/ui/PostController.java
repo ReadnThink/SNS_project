@@ -53,7 +53,7 @@ public class PostController {
     public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        postService.edit(postId, postEdit);
+        postService.edit(postId, postEdit, loginUser.getUser().getId());
 
         return ResponseEntity.ok(ResponseDto.success());
     }

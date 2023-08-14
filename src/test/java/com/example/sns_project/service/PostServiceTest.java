@@ -6,9 +6,11 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.exception.InvalidRequest;
 import com.example.sns_project.domain.user.dao.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.exception.UserNotFound;
+import com.example.sns_project.domain.user.exception.UserNotMatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
@@ -89,8 +93,8 @@ class PostServiceTest {
         UserNotFound exception = assertThrows(UserNotFound.class, () -> postService.write(postCreate,1L));
 
         //then
-        assertEquals(exception.getStatus(), HttpStatus.NOT_FOUND);
-        assertEquals(exception.getMessage(), "존재하지 않는 이메일 입니다.");
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        assertEquals("존재하지 않는 이메일 입니다.", exception.getMessage());
     }
 
     @Test
@@ -139,18 +143,12 @@ class PostServiceTest {
         final List<PostResponse> list = postService.getList(postSearch);
 
         //then
-        assertThat(list.size()).isEqualTo(5);
+        assertThat(list).hasSize(5);
     }
 
     @Test
     @DisplayName("글 수정 성공")
     void test_edit() {
-        //given
-        final Post post = Post.builder()
-                .id(1L)
-                .title("Title")
-                .content("Content")
-                .build();
 
         //when
         post.change("제목수정","내용수정");
@@ -158,6 +156,33 @@ class PostServiceTest {
         //then
         assertThat(post.getTitle()).isEqualTo("제목수정");
         assertThat(post.getContent()).isEqualTo("내용수정");
+    }
+
+    @Test
+    @DisplayName("글 수정 실패 - 권한없음")
+    void test_edit1() {
+        //when
+        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(2L));
+
+        //then
+        assertEquals(FORBIDDEN, exception.getStatus());
+        assertEquals("게시글을 수정/삭제는 게시글 작성자만 가능합니다.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("글 수정 실패 - 바보 포함")
+    void test_edit2() {
+        final Post valid = Post.builder()
+                .title("천재")
+                .content("바보")
+                .build();
+
+        //when
+        var exception = assertThrows(InvalidRequest.class, valid::isValid);
+
+        //then
+        assertEquals(BAD_REQUEST, exception.getStatus());
+        assertEquals("해당 단어는 포함될 수 없습니다.", exception.getMessage());
     }
 
 }

@@ -60,10 +60,18 @@ public class PostService {
     }
 
     @Transactional
-    public void edit(Long id, PostEdit postEdit) {
-        Post post = postRepository.findById(id).orElseThrow((PostNotFound::new));
+    public void edit(Long id, PostEdit postEdit, Long userId) {
+        var post = postRepository.findById(id)
+                .orElseThrow(PostNotFound::new);
 
+        validateUserExists(userId);
+        post.isSameUser(userId);
         post.change(postEdit.getTitle(), postEdit.getContent());
+    }
+
+    private void validateUserExists(final Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
     }
 
     public void delete(final Long postId) {

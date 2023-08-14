@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.example.sns_project.config.PostUrl.*;
-import static com.example.sns_project.global.util.StatusCode.SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.verify;
@@ -106,7 +105,7 @@ class PostControllerTest {
     @Test
     @DisplayName("글 작성 글의 제목은 제한 없음")
     @WithUserDetails(value = "sns@sns.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void 작성성공3() throws Exception {
+    void 작성3() throws Exception {
         var postCreate = PostCreate.builder()
                 .title("제목 글자수 제한이 없습니다.제목 글자수 제한이 없습니다.제목 글자수 제한이 없습니다.제목 글자수 제한이 없습니다.제목 글자수 제한이 없습니다.제목 글자수 제한이 없습니다.")
                 .content("내용")
@@ -137,24 +136,6 @@ class PostControllerTest {
                 )
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message").value("권한이 없습니다."))
-                .andDo(print())
-        ;
-    }
-
-    @Test
-    @DisplayName("글 작성 - 글의 제목/내용은 '바보' 가 포함되면 안됨")
-    void 작성실패3() throws Exception {
-        PostCreate postCreate = PostCreate.builder()
-                .title("안녕하세요 바보님")
-                .content("내용")
-                .build();
-
-        mockMvc.perform(post(POST_CREATE_URL.getValue())
-                        .contentType(APPLICATION_JSON)
-                        .content(om.writeValueAsBytes(postCreate))
-                )
-                .andExpect(jsonPath("$.message").value("해당 단어는 포함될 수 없습니다."))
-                .andExpect(status().isBadRequest())
                 .andDo(print())
         ;
     }
@@ -227,16 +208,17 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 수정 - 성공")
+    @DisplayName("글 수정 성공")
+    @WithUserDetails(value = "sns@sns.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void 글_수정() throws Exception {
         //given
-        final PostEdit request = PostEdit.builder()
+        var request = PostEdit.builder()
                 .title("수정")
                 .content("수정")
                 .build();
         //when
         mockMvc.perform(post(POST_EDIT_URL.getValue(), 1L)
-                        .contentType(APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
@@ -244,7 +226,26 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andDo(print())
         ;
-        verify(postService).edit(any(), any());
+        verify(postService).edit(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("글 수정 실패 - 로그인하지 않음")
+    void 글_수정1() throws Exception {
+        //given
+        var request = PostEdit.builder()
+                .title("WithUserDetails 없음")
+                .content("수정")
+                .build();
+        //when
+        mockMvc.perform(patch(POST_EDIT_URL.getValue(), 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(request))
+                )
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("권한이 없습니다."))
+                .andDo(print())
+        ;
     }
 
     @Test

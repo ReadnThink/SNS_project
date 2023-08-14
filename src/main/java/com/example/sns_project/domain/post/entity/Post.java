@@ -51,5 +51,9 @@ public class Post {
             throw new InvalidRequest();
         }
 
+        if (this.content.contains("바보")) {
+            throw new InvalidRequest();
+        }
+
     }
 }
