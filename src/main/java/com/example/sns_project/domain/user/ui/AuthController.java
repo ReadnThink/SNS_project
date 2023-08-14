@@ -26,13 +26,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto<Object>> signUp(@RequestBody @Valid SignUp signUp, BindingResult br) {
+    public ResponseEntity<ResponseDto<String>> signUp(@RequestBody @Valid SignUp signUp, BindingResult br) {
         authService.signUp(signUp);
 
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("회원가입을 성공했습니다.")
-                .build(), OK);
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
 }

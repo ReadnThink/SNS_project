@@ -1,11 +1,11 @@
 package com.example.sns_project.domain.post.ui;
 
+import com.example.sns_project.domain.post.application.PostService;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
-import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.global.util.ResponseDto;
-import com.example.sns_project.domain.post.application.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,50 +27,37 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<?> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult) {
+    public ResponseEntity<ResponseDto<String>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult) {
         postCreate.isValid();
         postService.write(postCreate);
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("글 작성을 성공했습니다.")
-                .build(), OK);
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<?> get(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<PostResponse>> get(@PathVariable Long postId) {
         final PostResponse postResponse = postService.get(postId);
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("글 조회에 성공했습니다.")
-                .data(postResponse)
-                .build(), OK);
+
+        return ResponseEntity.ok(ResponseDto.success(postResponse));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<?> getList(@ModelAttribute PostSearch postSearch) {
+    public ResponseEntity<ResponseDto<List<PostResponse>>> getList(@ModelAttribute PostSearch postSearch) {
         final List<PostResponse> postList = postService.getList(postSearch);
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("글 리스트 조회를 성공했습니다.")
-                .data(postList)
-                .build(), OK);
+
+        return ResponseEntity.ok(ResponseDto.success(postList));
     }
 
     @PostMapping("/posts/{postId}")
-    public ResponseEntity<?> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
+    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
         postService.edit(postId, postEdit);
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("글 수정을 성공했습니다.")
-                .build(), OK);
+
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> delete(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long postId) {
         postService.delete(postId);
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(1)
-                .message("글 삭제를 성공했습니다.")
-                .build(), OK);
+
+        return ResponseEntity.ok(ResponseDto.success());
     }
 }

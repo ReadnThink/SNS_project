@@ -13,21 +13,15 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(CustomApiException.class)
     public ResponseEntity<?> apiException(CustomApiException e){
-        log.error(e.getMessage());
-//        return new ResponseEntity<>(new ResponseDto<>(e.statusCode(),e.getMessage(),e.getValidation()), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(ResponseDto.builder()
-                .code(e.statusCode())
                 .message(e.getMessage())
-                .validation(e.getValidation())
-                .build(), HttpStatus.NOT_FOUND);
+                .build(), e.getStatus());
     }
 
     @ExceptionHandler(BindingException.class)
     public ResponseEntity<?> validationApiException(BindingException e) {
         return new ResponseEntity<>(ResponseDto.builder()
-                .code(-1)
                 .message(e.getMessage())
-                .data("")
                 .build(), HttpStatus.BAD_REQUEST);
     }
 }

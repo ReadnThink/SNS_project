@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
-import static com.example.sns_project.global.util.StatusCode.BAD_REQUEST;
-import static com.example.sns_project.global.util.StatusCode.SUCCESS;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -15,8 +13,7 @@ public class CustomResponseUtil {
     public static void success(HttpServletResponse response, Object dto) {
         try {
             ObjectMapper om = new ObjectMapper();
-            ResponseDto2<?> responseDto = new ResponseDto2<>(SUCCESS.getValue(), "로그인 성공", dto);
-            // todo ResponseDto<?> responseDto = new ResponseDto<>(SUCCESS.getValue(), "로그인 성공", dto);
+            ResponseDto<?> responseDto = ResponseDto.success("로그인 성공", dto);
             String responseBody = om.writeValueAsString(responseDto);
             response.setCharacterEncoding(UTF_8.name());
             response.setContentType(APPLICATION_JSON_VALUE);
@@ -29,8 +26,7 @@ public class CustomResponseUtil {
     public static void fail(HttpServletResponse response, String msg, HttpStatus httpStatus) {
         try {
             ObjectMapper om = new ObjectMapper();
-            ResponseDto2<?> responseDto = new ResponseDto2<>(BAD_REQUEST.getValue(), msg, null);
-            // todo ResponseDto<?> responseDto = new ResponseDto<>(BAD_REQUEST.getValue(), msg, null);
+            ResponseDto<?> responseDto = ResponseDto.error(msg, null);
             String responseBody = om.writeValueAsString(responseDto);
             response.setCharacterEncoding(UTF_8.name());
             response.setContentType(APPLICATION_JSON_VALUE);

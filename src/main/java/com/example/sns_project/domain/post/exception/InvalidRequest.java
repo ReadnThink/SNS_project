@@ -3,16 +3,16 @@ package com.example.sns_project.domain.post.exception;
 import com.example.sns_project.global.exception.CustomApiException;
 import org.springframework.http.HttpStatus;
 
-public class PostNotFound extends CustomApiException {
+public class InvalidRequest extends CustomApiException {
 
-    private static final String MESSAGE = "존재하지 않는 글입니다.";
+        private static final String MESSAGE = "해당 단어는 포함될 수 없습니다.";
 
-    public PostNotFound() {
+    public InvalidRequest() {
         super(MESSAGE);
     }
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.NOT_FOUND;
+        return HttpStatus.BAD_REQUEST;
     }
 }

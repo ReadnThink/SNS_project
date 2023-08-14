@@ -1,23 +1,37 @@
 package com.example.sns_project.global.util;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Map;
+@Builder
+public record ResponseDto<T>(String message, T data) {
 
-@Getter
-public class ResponseDto<T> {
-    private final Integer code;
-    private final String message;
-    private final T data;
-    private final Map<String, String> validation;
+    public static <T> ResponseDto<T> success() {
+        return ResponseDto.<T>builder()
+                .message("SUCCESS")
+                .build();
+    }
 
-    @Builder
-    public ResponseDto(final Integer code, final String message, final T data, Map<String, String> validation) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
-        this.validation = validation;
+    public static <T> ResponseDto<T> success(T data) {
+        return ResponseDto.<T>builder()
+                .message("SUCCESS")
+                .data(data)
+                .build();
+    }
+
+    public static <T> ResponseDto<T> success(String message, T data) {
+        return ResponseDto.<T>builder()
+                .message(message)
+                .data(data)
+                .build();
+    }
+
+    public static <T> ResponseDto<T> error(String message, T data) {
+        return ResponseDto.<T>builder()
+                .message("ERROR")
+                .data(data)
+                .build();
     }
 }
 

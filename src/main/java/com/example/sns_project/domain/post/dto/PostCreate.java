@@ -1,7 +1,7 @@
 package com.example.sns_project.domain.post.dto;
 
 import com.example.sns_project.domain.post.entity.Post;
-import com.example.sns_project.global.exception.InvalidRequest;
+import com.example.sns_project.domain.post.exception.InvalidRequest;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -31,7 +31,7 @@ public class PostCreate {
 
     public void isValid() {
         if (this.title.contains("바보")) {
-            throw new InvalidRequest("title", "제목에 바보를 포함할 수 없습니다.");
+            throw new InvalidRequest();
         }
 
     }

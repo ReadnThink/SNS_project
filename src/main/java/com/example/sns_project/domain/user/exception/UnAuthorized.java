@@ -3,16 +3,18 @@ package com.example.sns_project.domain.user.exception;
 import com.example.sns_project.global.exception.CustomApiException;
 import org.springframework.http.HttpStatus;
 
-public class AlreadyExistsEmailException extends CustomApiException {
-    private static final String MESSAGE = "이미 가입된 이메일입니다.";
+import static org.springframework.http.HttpStatus.*;
 
-    public AlreadyExistsEmailException() {
+public class UnAuthorized extends CustomApiException {
+
+    private static final String MESSAGE = "인증이 필요합니다.";
+
+    public UnAuthorized() {
         super(MESSAGE);
     }
 
-
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
+        return UNAUTHORIZED;
     }
 }
