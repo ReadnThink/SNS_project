@@ -4,7 +4,7 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dto.ResponseDto;
+import com.example.sns_project.global.util.ResponseDto;
 import com.example.sns_project.domain.post.application.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

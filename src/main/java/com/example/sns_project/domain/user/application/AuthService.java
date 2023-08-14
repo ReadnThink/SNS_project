@@ -1,6 +1,7 @@
 package com.example.sns_project.domain.user.application;
 
 import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.entity.UserRole;
 import com.example.sns_project.domain.user.exception.AlreadyExistsEmailException;
 import com.example.sns_project.domain.user.dao.UserRepository;
 import com.example.sns_project.domain.user.dto.SignUp;
@@ -28,6 +29,7 @@ public class AuthService {
                 .name(signUp.getName())
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .email(signUp.getEmail())
+                .userRole(UserRole.USER)
                 .build();
 
         userRepository.save(user);

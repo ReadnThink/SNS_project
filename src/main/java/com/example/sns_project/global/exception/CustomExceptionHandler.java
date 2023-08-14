@@ -1,6 +1,6 @@
 package com.example.sns_project.global.exception;
 
-import com.example.sns_project.domain.post.dto.ResponseDto;
+import com.example.sns_project.global.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

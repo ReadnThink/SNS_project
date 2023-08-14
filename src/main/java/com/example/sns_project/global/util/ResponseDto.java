@@ -1,10 +1,8 @@
-package com.example.sns_project.domain.post.dto;
+package com.example.sns_project.global.util;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter

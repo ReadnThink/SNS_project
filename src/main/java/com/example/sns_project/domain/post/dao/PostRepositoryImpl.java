@@ -1,8 +1,8 @@
 package com.example.sns_project.domain.post.dao;
 
 import com.example.sns_project.domain.post.entity.Post;
-import com.example.sns_project.domain.post.QPost;
 import com.example.sns_project.domain.post.dto.PostSearch;
+import com.example.sns_project.domain.post.entity.QPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
