@@ -1,11 +1,11 @@
 package com.example.sns_project.controller;
 
-import com.example.sns_project.exception.CustomApiException;
-import com.example.sns_project.exception.PostNotFound;
-import com.example.sns_project.request.PostCreate;
-import com.example.sns_project.request.PostEdit;
-import com.example.sns_project.response.PostResponse;
-import com.example.sns_project.service.PostService;
+import com.example.sns_project.global.exception.CustomApiException;
+import com.example.sns_project.domain.post.exception.PostNotFound;
+import com.example.sns_project.domain.post.dto.PostCreate;
+import com.example.sns_project.domain.post.dto.PostEdit;
+import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.domain.post.application.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

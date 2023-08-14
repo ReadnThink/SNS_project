@@ -1,11 +1,9 @@
 package com.example.sns_project;
 
-import com.example.sns_project.config.AppConfig;
+import com.example.sns_project.global.config.AppConfig;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableConfigurationProperties(AppConfig.class)
 @SpringBootApplication
