@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             SignUp loginRequest = om.readValue(request.getInputStream(), SignUp.class);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(), loginRequest.getPassword()
+                    loginRequest.email(), loginRequest.password()
             );
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);

@@ -79,8 +79,8 @@ class PostServiceTest {
                 .content("내용")
                 .build(), 1L);
 
-        assertThat(responseDto.getTitle()).isEqualTo("제목");
-        assertThat(responseDto.getContent()).isEqualTo("내용");
+        assertThat(responseDto.title()).isEqualTo("제목");
+        assertThat(responseDto.content()).isEqualTo("내용");
     }
 
     @Test
@@ -119,8 +119,8 @@ class PostServiceTest {
 
         //then
         assertThat(postResponse).isNotNull();
-        assertThat(postResponse.getContent()).isEqualTo(oneResponse.getContent());
-        assertThat(postResponse.getTitle()).isEqualTo(oneResponse.getTitle());
+        assertThat(postResponse.content()).isEqualTo(oneResponse.content());
+        assertThat(postResponse.title()).isEqualTo(oneResponse.title());
     }
 
     @Test

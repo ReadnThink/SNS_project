@@ -5,20 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
 @Builder
-public class SignUp {
+public record SignUp(
+        @NotBlank
+        @Email
+        String email,
 
-    @NotBlank
-    @Email
-    private String email;
+        @Size(min = 8)
+        String password,
 
-    @Size(min = 8)
-    private String password;
-
-    @NotBlank
-    private String name;
+        @NotBlank
+        String name
+) {
 }

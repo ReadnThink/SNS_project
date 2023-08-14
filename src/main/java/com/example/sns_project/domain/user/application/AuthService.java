@@ -20,15 +20,15 @@ public class AuthService {
 
 
     public void signUp(final SignUp signUp) {
-        final Optional<User> optionalUser = userRepository.findByEmail(signUp.getEmail());
+        final Optional<User> optionalUser = userRepository.findByEmail(signUp.email());
         if (optionalUser.isPresent()) {
             throw new AlreadyExistsEmailException();
         }
 
         var user = User.builder()
-                .name(signUp.getName())
-                .password(passwordEncoder.encode(signUp.getPassword()))
-                .email(signUp.getEmail())
+                .name(signUp.name())
+                .password(passwordEncoder.encode(signUp.password()))
+                .email(signUp.email())
                 .userRole(UserRole.USER)
                 .build();
 
