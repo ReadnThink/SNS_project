@@ -1,5 +1,6 @@
 package com.example.sns_project.controller;
 
+import com.example.sns_project.config.PostUrl;
 import com.example.sns_project.global.exception.CustomApiException;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.post.dto.PostCreate;
@@ -20,9 +21,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.example.sns_project.config.PostUrl.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,9 +50,9 @@ class PostControllerTest {
 
         given(postService.write(any())).willReturn(postResponse);
 
-        mockMvc.perform(post("/posts")
+        mockMvc.perform(post(POST_CREATE_URL.getValue())
                         .header("authorization", "kent")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
@@ -64,8 +67,8 @@ class PostControllerTest {
                 .title("")
                 .content("내용")
                 .build();
-        mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(POST_CREATE_URL.getValue())
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(jsonPath("$.message").value("타이틀을 입력해주세요"))
@@ -82,8 +85,8 @@ class PostControllerTest {
                 .content("내용")
                 .build();
 
-        mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(POST_CREATE_URL.getValue())
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(jsonPath("$.message").value("내용은 30글자 이내로 입력 가능합니다."))
@@ -100,8 +103,8 @@ class PostControllerTest {
                 .content("내용")
                 .build();
 
-        mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(POST_CREATE_URL.getValue())
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsBytes(postCreate))
                 )
                 .andExpect(jsonPath("$.message").value("해당 단어는 포함될 수 없습니다."))
@@ -115,8 +118,8 @@ class PostControllerTest {
     void 조회성공1() throws Exception {
         Long postId = 1L;
         //when
-        mockMvc.perform(get("/posts/{postId}", postId)
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get(POST_GET_URL.getValue(), postId)
+                        .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
@@ -138,8 +141,8 @@ class PostControllerTest {
         given(postService.get(postId)).willThrow(customApiException);
 
         //when
-        mockMvc.perform(get("/posts/{postId}", postId)
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get(POST_GET_URL.getValue(), postId)
+                        .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("존재하지 않는 글입니다."))
@@ -165,8 +168,8 @@ class PostControllerTest {
         given(postService.getList(any())).willReturn(requestPosts);
 
         //when
-        mockMvc.perform(get("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get(POST_LIST_URL.getValue())
+                        .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
@@ -186,8 +189,8 @@ class PostControllerTest {
                 .content("수정")
                 .build();
         //when
-        mockMvc.perform(post("/posts/{postId}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(POST_EDIT_URL.getValue(), 1L)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsString(request))
                 )
                 .andExpect(status().isOk())
@@ -202,8 +205,8 @@ class PostControllerTest {
     @DisplayName("글 삭제 - 성공")
     void 글_삭제() throws Exception {
         //when
-        mockMvc.perform(delete("/posts/{postId}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(delete(POST_DELETE_URL.getValue(), 1L)
+                        .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
