@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 @Service
 public class CommentService {
 
@@ -39,7 +41,7 @@ public class CommentService {
                 .orElseThrow(PostNotFound::new);
 
         final Comment comment = Comment.builder()
-                .author(user.getName())
+                .author(user.getEmail())
                 .content(commentCreate.content())
                 .post(post)
                 .build();
@@ -70,7 +72,7 @@ public class CommentService {
         return commentRepository.findAll(pageable).stream()
                 .map(CommentResponse::new)
                 .sorted((c1, c2) -> c2.commentId().compareTo(c1.commentId()))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 
@@ -82,11 +84,27 @@ public class CommentService {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
-        if (!comment.isSameUser(user.getName())){
+        if (!comment.isSameUser(user.getEmail())){
             throw new UserNotMatch();
         }
 
         comment.editComment(commentEdit.comment());
-        return "댓글 수정에 성공하였습니다.";
+        return "댓글 수정을 성공하였습니다.";
+    }
+
+    @Transactional
+    public String delete(final Long commentId, final Long userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
+        var comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFound::new);
+
+        if (!comment.isSameUser(user.getEmail())){
+            throw new UserNotMatch();
+        }
+
+        commentRepository.delete(comment);
+        return "댓글 삭제를 성공하였습니다.";
     }
 }

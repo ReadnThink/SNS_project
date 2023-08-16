@@ -7,6 +7,7 @@ import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.global.config.auth.LoginUser;
 import com.example.sns_project.global.util.ResponseDto;
 import jakarta.validation.Valid;
+import lombok.Builder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,6 +51,12 @@ public class CommentController {
     @PostMapping("/auth/comments/{commentId}")
     public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
         final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getId());
+        return ResponseEntity.ok(ResponseDto.success(success));
+    }
+
+    @DeleteMapping("/auth/comments/{commentId}")
+    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long commentId, @AuthenticationPrincipal LoginUser loginUser) {
+        final String success = commentService.delete(commentId, loginUser.getUser().getId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }
 }
