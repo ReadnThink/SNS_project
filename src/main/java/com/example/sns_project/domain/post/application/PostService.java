@@ -73,6 +73,7 @@ public class PostService {
         );
     }
 
+    @Transactional
     public void delete(final Long postId, Long userId) {
         var post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);

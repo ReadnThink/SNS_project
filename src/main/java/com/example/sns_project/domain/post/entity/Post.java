@@ -1,6 +1,6 @@
 package com.example.sns_project.domain.post.entity;
 
-import com.example.sns_project.domain.comment.Comment;
+import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.post.exception.InvalidRequest;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.exception.UserNotMatch;

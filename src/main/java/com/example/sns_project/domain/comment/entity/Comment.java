@@ -1,4 +1,4 @@
-package com.example.sns_project.domain.comment;
+package com.example.sns_project.domain.comment.entity;
 
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.user.entity.User;
@@ -12,14 +12,17 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-@Entity
+
 @Getter
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String author;
 
     private String content;
 
@@ -34,10 +37,12 @@ public class Comment {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Comment(final String content, final Post post) {
+    public Comment(final String content, final String author, final Post post) {
         this.content = content;
+        this.author = author;
         this.post = post;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
     }
 }
+
