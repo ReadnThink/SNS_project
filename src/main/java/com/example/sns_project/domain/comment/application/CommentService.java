@@ -2,6 +2,7 @@ package com.example.sns_project.domain.comment.application;
 
 import com.example.sns_project.domain.comment.dao.CommentRepository;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
+import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.comment.exception.CommentNotFound;
@@ -9,15 +10,13 @@ import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.dao.UserRepository;
 import com.example.sns_project.domain.user.exception.UserNotFound;
+import com.example.sns_project.domain.user.exception.UserNotMatch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.Comparator.*;
 
 @Service
 public class CommentService {
@@ -75,4 +74,19 @@ public class CommentService {
     }
 
 
+    @Transactional
+    public String edit(final Long commentId, final CommentEdit commentEdit, final Long userId) {
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+
+        var comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFound::new);
+
+        if (!comment.isSameUser(user.getName())){
+            throw new UserNotMatch();
+        }
+
+        comment.editComment(commentEdit.comment());
+        return "댓글 수정에 성공하였습니다.";
+    }
 }

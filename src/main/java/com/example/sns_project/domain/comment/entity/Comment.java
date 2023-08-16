@@ -2,7 +2,7 @@ package com.example.sns_project.domain.comment.entity;
 
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.exception.InvalidRequest;
-import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.exception.UserNotMatch;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -51,6 +51,14 @@ public class Comment {
             throw new InvalidRequest();
         }
 
+    }
+
+    public boolean isSameUser(final String name) {
+        return this.getAuthor().equals(name);
+    }
+
+    public void editComment(final String comment) {
+        this.content = comment;
     }
 }
 

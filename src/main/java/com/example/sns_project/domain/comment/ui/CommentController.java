@@ -2,6 +2,7 @@ package com.example.sns_project.domain.comment.ui;
 
 import com.example.sns_project.domain.comment.application.CommentService;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
+import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.global.config.auth.LoginUser;
 import com.example.sns_project.global.util.ResponseDto;
@@ -46,4 +47,9 @@ public class CommentController {
         return ResponseEntity.ok(ResponseDto.success(commentResponseList));
     }
 
+    @PostMapping("/auth/comments/{commentId}")
+    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
+        final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getId());
+        return ResponseEntity.ok(ResponseDto.success(success));
+    }
 }
