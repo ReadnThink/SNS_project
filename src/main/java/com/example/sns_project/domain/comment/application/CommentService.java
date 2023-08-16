@@ -37,6 +37,8 @@ public class CommentService {
                 .post(post)
                 .build();
 
+        comment.isValid();
+
         final Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.builder()

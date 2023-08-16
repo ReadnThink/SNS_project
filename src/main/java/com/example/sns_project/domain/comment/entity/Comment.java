@@ -1,6 +1,7 @@
 package com.example.sns_project.domain.comment.entity;
 
 import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.exception.InvalidRequest;
 import com.example.sns_project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -43,6 +44,13 @@ public class Comment {
         this.post = post;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
+    }
+
+    public void isValid() {
+        if (this.content.contains("바보")) {
+            throw new InvalidRequest();
+        }
+
     }
 }
 
