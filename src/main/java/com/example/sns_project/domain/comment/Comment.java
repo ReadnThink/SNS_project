@@ -1,6 +1,7 @@
-package com.example.sns_project.domain.user.entity;
+package com.example.sns_project.domain.comment;
 
 import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,42 +11,33 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User{
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String content;
 
-    private String email;
+    @ManyToOne
+    @JoinColumn
+    private Post post;
 
-    private String password;
-
-    private UserRole userRole;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Post> posts;
-
+    @CreatedDate
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public User(final Long id, final String name, final String email, final String password, final  UserRole userRole) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.userRole = userRole;
+    public Comment(final String content, final Post post) {
+        this.content = content;
+        this.post = post;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
     }
-
 }
