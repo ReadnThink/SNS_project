@@ -1,13 +1,13 @@
-package com.example.sns_project.domain.post.exception;
+package com.example.sns_project.domain.comment.exception;
 
 import com.example.sns_project.global.exception.CustomApiException;
 import org.springframework.http.HttpStatus;
 
-public class PostNotFound extends CustomApiException {
+public class CommentNotFound extends CustomApiException {
 
-    private static final String MESSAGE = "존재하지 않는 글입니다.";
+    private static final String MESSAGE = "존재하지 않는 댓글입니다.";
 
-    public PostNotFound() {
+    public CommentNotFound() {
         super(MESSAGE);
     }
 

@@ -4,12 +4,20 @@ import com.example.sns_project.domain.comment.dao.CommentRepository;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.domain.comment.entity.Comment;
+import com.example.sns_project.domain.comment.exception.CommentNotFound;
 import com.example.sns_project.domain.post.dao.PostRepository;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.dao.UserRepository;
 import com.example.sns_project.domain.user.exception.UserNotFound;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.*;
 
 @Service
 public class CommentService {
@@ -47,4 +55,24 @@ public class CommentService {
                 .author(savedComment.getAuthor())
                 .build();
     }
+
+    public CommentResponse getComment(final Long commentId) {
+        final Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFound::new);
+
+        return CommentResponse.builder()
+                .commentId(comment.getId())
+                .comment(comment.getContent())
+                .author(comment.getAuthor())
+                .build();
+    }
+
+    public List<CommentResponse> getList(final Pageable pageable) {
+        return commentRepository.findAll(pageable).stream()
+                .map(CommentResponse::new)
+                .sorted((c1, c2) -> c2.commentId().compareTo(c1.commentId()))
+                .collect(Collectors.toList());
+    }
+
+
 }
