@@ -28,6 +28,7 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public PostResponse write(PostCreate postCreate, final Long userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
