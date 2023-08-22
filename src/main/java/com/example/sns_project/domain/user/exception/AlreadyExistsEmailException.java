@@ -1,6 +1,6 @@
 package com.example.sns_project.domain.user.exception;
 
-import com.example.sns_project.global.exception.CustomApiException;
+import com.example.sns_project.config.exception.CustomApiException;
 import org.springframework.http.HttpStatus;
 
 public class AlreadyExistsEmailException extends CustomApiException {

@@ -1,13 +1,13 @@
 package com.example.sns_project.service;
 
-import com.example.sns_project.domain.post.application.PostService;
-import com.example.sns_project.domain.post.dao.PostRepository;
+import com.example.sns_project.application.PostService;
+import com.example.sns_project.infra.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.entity.Post;
-import com.example.sns_project.domain.post.exception.InvalidRequest;
-import com.example.sns_project.domain.user.dao.UserRepository;
+import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.infra.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
