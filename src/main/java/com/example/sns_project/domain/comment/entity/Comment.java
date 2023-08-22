@@ -61,6 +61,7 @@ public class Comment {
 
     public void editComment(final String comment) {
         this.content = comment;
+        this.lastModifiedAt = LocalDateTime.now();
     }
 }
 

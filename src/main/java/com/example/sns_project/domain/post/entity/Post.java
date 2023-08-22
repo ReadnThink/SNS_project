@@ -50,10 +50,10 @@ public class Post {
         this.lastModifiedAt = LocalDateTime.now();
     }
 
-    public void change(String title, String content) {
+    public void editPost(String title, String content) {
         isValid();
-        this.title = title != null ? title : this.title;
-        this.content = content != null ? content : this.content;
+        this.title = title;
+        this.content = content;
         this.lastModifiedAt = LocalDateTime.now();
     }
 

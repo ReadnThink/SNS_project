@@ -151,7 +151,7 @@ class PostServiceTest {
     void test_edit() {
 
         //when
-        post.change("제목수정","내용수정");
+        post.editPost("제목수정","내용수정");
 
         //then
         assertThat(post.getTitle()).isEqualTo("제목수정");

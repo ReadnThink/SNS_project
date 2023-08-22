@@ -67,7 +67,7 @@ public class PostService {
 
         validateUserExists(userId);
         post.isSameUser(userId);
-        post.change(
+        post.editPost(
                 postEdit.title(),
                 postEdit.content()
         );
