@@ -1,5 +1,6 @@
 package com.example.sns_project.domain.comment.entity;
 
+import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 
 @Getter
@@ -46,13 +48,14 @@ public class Comment {
     }
 
     public void isValid() {
-        if (this.content.contains("바보")) {
+        if (Arrays.stream(BanWords.values())
+                .anyMatch(v -> v.getValue().contains(this.content))) {
             throw new InvalidRequest();
         }
-
     }
 
     public boolean isSameUser(final String name) {
+        isValid();
         return this.getAuthor().equals(name);
     }
 

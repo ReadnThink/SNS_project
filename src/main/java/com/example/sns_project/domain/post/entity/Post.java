@@ -1,5 +1,6 @@
 package com.example.sns_project.domain.post.entity;
 
+import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.config.exception.InvalidRequest;
 import com.example.sns_project.domain.user.entity.User;
@@ -13,6 +14,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -49,6 +51,7 @@ public class Post {
     }
 
     public void change(String title, String content) {
+        isValid();
         this.title = title != null ? title : this.title;
         this.content = content != null ? content : this.content;
         this.lastModifiedAt = LocalDateTime.now();
@@ -65,13 +68,15 @@ public class Post {
     }
 
     public void isValid() {
-        if (this.title.contains("바보")) {
+        // todo 한번의 람다로 모두 처리하고싶다...
+        searchBanWords(this.title);
+        searchBanWords(this.content);
+    }
+
+    private void searchBanWords(String value) {
+        if (Arrays.stream(BanWords.values())
+                .anyMatch(v -> v.getValue().contains(value))) {
             throw new InvalidRequest();
         }
-
-        if (this.content.contains("바보")) {
-            throw new InvalidRequest();
-        }
-
     }
 }
