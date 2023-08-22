@@ -1,8 +1,7 @@
 package com.example.sns_project.domain.comment.entity;
 
 import com.example.sns_project.domain.post.entity.Post;
-import com.example.sns_project.domain.post.exception.InvalidRequest;
-import com.example.sns_project.domain.user.exception.UserNotMatch;
+import com.example.sns_project.config.exception.InvalidRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
