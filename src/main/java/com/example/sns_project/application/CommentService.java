@@ -75,13 +75,10 @@ public class CommentService {
 
     @Transactional
     public String edit(final Long commentId, final CommentEdit commentEdit, final Long userId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
-
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
-        if (!comment.isSameUser(user.getEmail())){
+        if (!comment.isSameUser(userId)){
             throw new UserNotMatch();
         }
 
@@ -91,13 +88,10 @@ public class CommentService {
 
     @Transactional
     public String delete(final Long commentId, final Long userId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
-
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
-        if (!comment.isSameUser(user.getEmail())){
+        if (!comment.isSameUser(userId)){
             throw new UserNotMatch();
         }
 

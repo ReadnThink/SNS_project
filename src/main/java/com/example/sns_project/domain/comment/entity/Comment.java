@@ -55,12 +55,20 @@ public class Comment {
         }
     }
 
-    public boolean isSameUser(final String name) {
+    public void isValid(String content) {
+        if (Arrays.stream(BanWords.values())
+                .anyMatch(v -> v.getValue().contains(this.content))) {
+            throw new InvalidRequest();
+        }
+    }
+
+    public boolean isSameUser(final Long userId) {
         isValid();
-        return this.getAuthor().equals(name);
+        return this.post.getUser().getId().equals(userId);
     }
 
     public void editComment(final String comment) {
+        isValid(comment);
         this.content = comment;
         this.lastModifiedAt = LocalDateTime.now();
     }

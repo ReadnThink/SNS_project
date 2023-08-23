@@ -51,7 +51,7 @@ public class Post {
     }
 
     public void editPost(String title, String content) {
-        isValid();
+        isValid(title, content);
         this.title = title;
         this.content = content;
         this.lastModifiedAt = LocalDateTime.now();
@@ -71,6 +71,10 @@ public class Post {
         // todo 한번의 람다로 모두 처리하고싶다...
         searchBanWords(this.title);
         searchBanWords(this.content);
+    }
+    public void isValid(String title, String content) {
+        searchBanWords(title);
+        searchBanWords(content);
     }
 
     private void searchBanWords(String value) {
