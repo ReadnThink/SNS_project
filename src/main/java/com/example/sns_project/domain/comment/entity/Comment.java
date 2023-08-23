@@ -45,6 +45,7 @@ public class Comment {
         this.post = post;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
+        isValid();
     }
 
     public void isValid() {

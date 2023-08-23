@@ -32,10 +32,12 @@ public class PostService {
     public PostResponse write(PostCreate postCreate, final Long userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
-        var post = postRepository.save(postCreate.toEntity());
+        final Post postNotValid = postCreate.toEntity();
+        postNotValid.isValid();
+
+        var post = postRepository.save(postNotValid);
 
         post.addUser(user);
-        post.isValid();
 
         return PostResponse.builder()
                 .id(post.getId())

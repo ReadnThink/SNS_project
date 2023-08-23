@@ -13,6 +13,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto<Object>> allException(Exception e){
         return new ResponseEntity<>(ResponseDto.builder()
+                // todo 하드코딩이 없게 예외처리를 하고싶은데
                 .message("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
