@@ -51,8 +51,7 @@ public class UserRepositoryImpl implements UserRepository{
     public int count() {
         return entityManager.createQuery("select u from User u", User.class)
                 .getResultList()
-                .size()
-                ;
+                .size();
     }
 
 

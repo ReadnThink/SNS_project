@@ -1,14 +1,12 @@
 package com.example.sns_project.application;
 
-import com.example.sns_project.infra.CommentRepository;
+import com.example.sns_project.infra.*;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.comment.exception.CommentNotFound;
-import com.example.sns_project.infra.PostRepository;
 import com.example.sns_project.domain.post.exception.PostNotFound;
-import com.example.sns_project.infra.UserRepository;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public CommentService(final UserRepository userRepository, final PostRepository postRepository, final CommentRepository commentRepository) {
+    public CommentService(final UserRepository userRepository, final PostRepository postRepository, final CommentRepositoryImpl commentRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
@@ -54,6 +52,7 @@ public class CommentService {
                 .build();
     }
 
+    @Transactional
     public CommentResponse getComment(final Long commentId) {
         final Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
@@ -65,6 +64,7 @@ public class CommentService {
                 .build();
     }
 
+    @Transactional
     public List<CommentResponse> getList(final Pageable pageable) {
         return commentRepository.findAll(pageable).stream()
                 .map(CommentResponse::new)
