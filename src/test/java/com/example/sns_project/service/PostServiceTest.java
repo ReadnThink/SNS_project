@@ -1,13 +1,12 @@
 package com.example.sns_project.service;
 
 import com.example.sns_project.application.PostService;
-import com.example.sns_project.infra.PostRepository;
+import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
-import com.example.sns_project.infra.UserRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
@@ -18,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -130,17 +131,18 @@ class PostServiceTest {
         List<Post> response = IntStream.range(1, 6)
                 .mapToObj(i -> {
                     return Post.builder()
+                            .id((long) i)
                             .title("Title " + i)
                             .content("Content " + i)
                             .build();
                 })
                 .collect(Collectors.toList());
         // stub
-        given(postRepository.getList(any())).willReturn(response);
+        given(postRepository.findAll(any())).willReturn(response);
 
         //when
-        PostSearch postSearch = PostSearch.builder().build();
-        final List<PostResponse> list = postService.getList(postSearch);
+        Pageable pageable = PageRequest.of(0, 20);
+        final List<PostResponse> list = postService.getList(pageable);
 
         //then
         assertThat(list).hasSize(5);

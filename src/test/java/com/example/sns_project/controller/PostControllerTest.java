@@ -5,7 +5,7 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.exception.PostNotFound;
-import com.example.sns_project.infra.UserRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserRole;
 import com.example.sns_project.config.exception.CustomApiException;

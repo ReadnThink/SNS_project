@@ -1,6 +1,6 @@
 package com.example.sns_project.config.auth;
 
-import com.example.sns_project.infra.UserRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserRole;
 import com.example.sns_project.config.handler.Http401Handler;
