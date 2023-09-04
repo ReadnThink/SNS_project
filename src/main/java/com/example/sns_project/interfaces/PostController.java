@@ -9,6 +9,7 @@ import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -43,8 +44,8 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<ResponseDto<List<PostResponse>>> getList(@ModelAttribute PostSearch postSearch) {
-        final List<PostResponse> postList = postService.getList(postSearch);
+    public ResponseEntity<ResponseDto<List<PostResponse>>> getList(Pageable pageable) {
+        final List<PostResponse> postList = postService.getList(pageable);
 
         return ResponseEntity.ok(ResponseDto.success(postList));
     }

@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -130,17 +132,18 @@ class PostServiceTest {
         List<Post> response = IntStream.range(1, 6)
                 .mapToObj(i -> {
                     return Post.builder()
+                            .id((long) i)
                             .title("Title " + i)
                             .content("Content " + i)
                             .build();
                 })
                 .collect(Collectors.toList());
         // stub
-        given(postRepository.getList(any())).willReturn(response);
+        given(postRepository.findAll(any())).willReturn(response);
 
         //when
-        PostSearch postSearch = PostSearch.builder().build();
-        final List<PostResponse> list = postService.getList(postSearch);
+        Pageable pageable = PageRequest.of(0, 20);
+        final List<PostResponse> list = postService.getList(pageable);
 
         //then
         assertThat(list).hasSize(5);

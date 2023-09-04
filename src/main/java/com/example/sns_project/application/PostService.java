@@ -10,11 +10,14 @@ import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.infra.UserRepository;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -46,6 +49,7 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public PostResponse get(final Long postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
@@ -56,10 +60,12 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(PostSearch postSearch) {
-        return postRepository.getList(postSearch).stream()
+    @Transactional
+    public List<PostResponse> getList(Pageable pageable) {
+        return postRepository.findAll(pageable).stream()
                 .map(PostResponse::new)
-                .collect(Collectors.toList());
+                .sorted((c1, c2) -> c2.id().compareTo(c1.id()))
+                .collect(toList());
     }
 
     @Transactional

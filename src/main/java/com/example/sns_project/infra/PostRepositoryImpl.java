@@ -1,24 +1,50 @@
 package com.example.sns_project.infra;
 
-import com.example.sns_project.domain.post.dto.PostSearch;
+import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.post.entity.Post;
-import com.example.sns_project.domain.post.entity.QPost;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-@RequiredArgsConstructor
-public class PostRepositoryImpl implements PostRepositoryCustom{
-
-    private final JPAQueryFactory jpaQueryFactory;
+@Repository
+public class PostRepositoryImpl implements PostRepository {
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Override
+    public Optional<Post> findById(final Long id) {
+        try {
+            return Optional.of(entityManager.find(Post.class, id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
     @Override
-    public List<Post> getList(final PostSearch postSearch) {
-        return jpaQueryFactory.selectFrom(QPost.post)
-                .limit(postSearch.getSize())
-                .offset(postSearch.getOffset())
-                .orderBy(QPost.post.id.desc())
-                .fetch();
+    public Post save(final Post post) {
+        entityManager.persist(post);
+        return post;
+    }
+
+    @Override
+    public void deleteAll() {
+        entityManager.createQuery("delete from Post");
+    }
+
+    @Override
+    public List<Post> findAll(final Pageable pageable) {
+        // todo Pageable 처리 해야함...
+        return entityManager.createQuery("select p from Post p")
+                .setFirstResult(1)
+                .setMaxResults(10)
+                .getResultList();
+    }
+
+    @Override
+    public void delete(final Post post) {
+        entityManager.remove(post);
     }
 }
