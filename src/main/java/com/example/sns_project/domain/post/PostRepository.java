@@ -1,4 +1,4 @@
-package com.example.sns_project.infra;
+package com.example.sns_project.domain.post;
 
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.post.entity.Post;

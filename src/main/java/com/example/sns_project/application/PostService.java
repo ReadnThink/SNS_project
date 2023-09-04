@@ -1,13 +1,12 @@
 package com.example.sns_project.application;
 
-import com.example.sns_project.infra.PostRepository;
+import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.exception.PostNotFound;
-import com.example.sns_project.infra.UserRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 

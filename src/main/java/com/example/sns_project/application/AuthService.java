@@ -1,6 +1,6 @@
 package com.example.sns_project.application;
 
-import com.example.sns_project.infra.UserRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.dto.SignUp;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserRole;

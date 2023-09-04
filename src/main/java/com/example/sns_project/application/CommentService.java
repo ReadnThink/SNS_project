@@ -1,5 +1,8 @@
 package com.example.sns_project.application;
 
+import com.example.sns_project.domain.comment.CommentRepository;
+import com.example.sns_project.domain.post.PostRepository;
+import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.infra.*;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;

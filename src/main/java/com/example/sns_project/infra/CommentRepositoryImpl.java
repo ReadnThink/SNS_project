@@ -1,5 +1,6 @@
 package com.example.sns_project.infra;
 
+import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.domain.comment.entity.Comment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

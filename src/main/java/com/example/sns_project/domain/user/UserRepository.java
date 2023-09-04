@@ -1,4 +1,4 @@
-package com.example.sns_project.infra;
+package com.example.sns_project.domain.user;
 
 import com.example.sns_project.domain.user.entity.User;
 import org.springframework.data.repository.CrudRepository;
