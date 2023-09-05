@@ -3,6 +3,7 @@ package com.example.sns_project.application;
 import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.user.UserRepository;
+import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.infra.*;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;
@@ -34,7 +35,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse comment(final Long postId, final CommentCreate commentCreate, final Long userId) {
+    public CommentResponse comment(final Long postId, final CommentCreate commentCreate, final UserId userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
         var post = postRepository.findById(postId)
@@ -77,7 +78,7 @@ public class CommentService {
 
 
     @Transactional
-    public String edit(final Long commentId, final CommentEdit commentEdit, final Long userId) {
+    public String edit(final Long commentId, final CommentEdit commentEdit, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
@@ -90,7 +91,7 @@ public class CommentService {
     }
 
     @Transactional
-    public String delete(final Long commentId, final Long userId) {
+    public String delete(final Long commentId, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 

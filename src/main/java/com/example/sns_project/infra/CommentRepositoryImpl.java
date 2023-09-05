@@ -43,7 +43,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public List<Comment> findAll(final Pageable pageable) {
         // todo Pageable 처리 해야함...
         return entityManager.createQuery("select c from Comment c")
-                .setFirstResult(1)
+                .setFirstResult(0)
                 .setMaxResults(10)
                 .getResultList();
     }

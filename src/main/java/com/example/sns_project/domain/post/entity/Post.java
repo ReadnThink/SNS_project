@@ -4,6 +4,7 @@ import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.config.exception.InvalidRequest;
 import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -61,8 +62,8 @@ public class Post {
         this.user = user;
     }
 
-    public void isSameUser(final Long userId) {
-        if (this.user == null || this.user.getId() != userId ) {
+    public void isSameUser(final UserId userId) {
+        if (this.user == null || !this.user.getId().equals(userId) ) {
             throw new UserNotMatch();
         }
     }

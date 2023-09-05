@@ -40,6 +40,7 @@ public class CommentController {
         return ResponseEntity.ok(ResponseDto.success(comment));
     }
 
+    // todo 전체 댓글 리스트가 아닌 특정 댓글 리스트 API 필요
     @GetMapping("/comments")
     public ResponseEntity<ResponseDto<List<CommentResponse>>> commentList(Pageable pageable){
         final List<CommentResponse> commentResponseList = commentService.getList(pageable);

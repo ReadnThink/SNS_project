@@ -6,11 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,9 +15,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private UserId id;
 
     private String name;
 
@@ -37,8 +33,15 @@ public class User{
 
     private LocalDateTime lastModifiedAt;
 
+    public UserId getId() {
+        return id;
+    }
+
     @Builder
-    public User(final Long id, final String name, final String email, final String password, final  UserRole userRole) {
+    public User(UserId id, final String name, final String email, final String password, final  UserRole userRole) {
+        if (id == null) {
+            id = new UserId();
+        }
         this.id = id;
         this.name = name;
         this.email = email;
@@ -47,5 +50,4 @@ public class User{
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
     }
-
 }

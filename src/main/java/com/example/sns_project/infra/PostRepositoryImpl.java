@@ -38,7 +38,7 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> findAll(final Pageable pageable) {
         // todo Pageable 처리 해야함...
         return entityManager.createQuery("select p from Post p")
-                .setFirstResult(1)
+                .setFirstResult(0)
                 .setMaxResults(10)
                 .getResultList();
     }

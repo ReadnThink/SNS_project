@@ -3,6 +3,7 @@ package com.example.sns_project.domain.comment.entity;
 import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -62,7 +63,7 @@ public class Comment {
         }
     }
 
-    public boolean isSameUser(final Long userId) {
+    public boolean isSameUser(final UserId userId) {
         isValid();
         return this.post.getUser().getId().equals(userId);
     }
