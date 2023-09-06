@@ -2,6 +2,7 @@ package com.example.sns_project.infra;
 
 import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ public class PostRepositoryImpl implements PostRepository {
     @PersistenceContext
     private EntityManager entityManager;
     @Override
-    public Optional<Post> findById(final Long id) {
+    public Optional<Post> findById(final PostId id) {
         try {
             return Optional.of(entityManager.find(Post.class, id));
         } catch (Exception e) {

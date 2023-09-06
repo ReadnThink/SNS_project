@@ -7,6 +7,7 @@ import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
+import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<ResponseDto<PostResponse>> get(@PathVariable Long postId) {
+    public ResponseEntity<ResponseDto<PostResponse>> get(@ModelAttribute PostId postId) {
         final PostResponse postResponse = postService.get(postId);
 
         return ResponseEntity.ok(ResponseDto.success(postResponse));
@@ -51,7 +52,7 @@ public class PostController {
     }
 
     @PostMapping("/auth/posts/{postId}")
-    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long postId, @RequestBody PostEdit postEdit
+    public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute PostId postId, @RequestBody PostEdit postEdit
             , @AuthenticationPrincipal LoginUser loginUser)
     {
         postService.edit(postId, postEdit, loginUser.getUser().getId());
@@ -60,7 +61,7 @@ public class PostController {
     }
 
     @DeleteMapping("/auth/posts/{postId}")
-    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long postId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute PostId postId, @AuthenticationPrincipal LoginUser loginUser) {
         postService.delete(postId, loginUser.getUser().getId());
 
         return ResponseEntity.ok(ResponseDto.success());

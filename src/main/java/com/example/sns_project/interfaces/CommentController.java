@@ -7,6 +7,7 @@ import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
 import com.example.sns_project.domain.comment.entity.CommentId;
+import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class CommentController {
     }
 
     @PostMapping("/auth/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@PathVariable final Long postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
+    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
         final CommentResponse comment = commentService.comment(postId, commentCreate, loginUser.getUser().getId());

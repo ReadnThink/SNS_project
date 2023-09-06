@@ -6,6 +6,7 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserId;
@@ -50,10 +51,12 @@ class PostServiceTest {
     PostCreate postCreate;
 
     UserId userId;
+    PostId postId;
 
     @BeforeEach
     void setUp() {
         userId = new UserId("TEST");
+        postId = new PostId("1");
         user = User.builder()
                 .id(userId)
                 .email("wanted@wanted.com")
@@ -62,7 +65,7 @@ class PostServiceTest {
 
         post = Post.builder()
                 .user(user)
-                .id(1L)
+                .id(postId)
                 .title("제목")
                 .content("내용")
                 .build();
@@ -108,7 +111,7 @@ class PostServiceTest {
     void test() {
         //given
         final Post response = Post.builder()
-                .id(1L)
+                .id(postId)
                 .title("Title")
                 .content("Content")
                 .build();
@@ -136,7 +139,7 @@ class PostServiceTest {
         List<Post> response = IntStream.range(1, 6)
                 .mapToObj(i -> {
                     return Post.builder()
-                            .id((long) i)
+                            .id(new PostId(String.valueOf(i)))
                             .title("Title " + i)
                             .content("Content " + i)
                             .build();

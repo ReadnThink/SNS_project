@@ -5,6 +5,7 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.Post;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
@@ -21,7 +22,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Service
 public class PostService {
-
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
@@ -49,7 +49,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse get(final Long postId) {
+    public PostResponse get(final PostId postId) {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
@@ -63,12 +63,12 @@ public class PostService {
     public List<PostResponse> getList(Pageable pageable) {
         return postRepository.findAll(pageable).stream()
                 .map(PostResponse::new)
-                .sorted((c1, c2) -> c2.id().compareTo(c1.id()))
+                .sorted((c1, c2) -> c2.id().getPostId().compareTo(c1.id().getPostId()))
                 .collect(toList());
     }
 
     @Transactional
-    public void edit(Long id, PostEdit postEdit, UserId userId) {
+    public void edit(PostId id, PostEdit postEdit, UserId userId) {
         var post = postRepository.findById(id)
                 .orElseThrow(PostNotFound::new);
 
@@ -82,7 +82,7 @@ public class PostService {
     }
 
     @Transactional
-    public void delete(final Long postId, UserId userId) {
+    public void delete(final PostId postId, UserId userId) {
         var post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
 

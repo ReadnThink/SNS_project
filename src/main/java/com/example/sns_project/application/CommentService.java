@@ -3,6 +3,7 @@ package com.example.sns_project.application;
 import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.post.PostRepository;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.infra.*;
@@ -24,7 +25,6 @@ import static java.util.stream.Collectors.*;
 
 @Service
 public class CommentService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -36,7 +36,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse comment(final Long postId, final CommentCreate commentCreate, final UserId userId) {
+    public CommentResponse comment(final PostId postId, final CommentCreate commentCreate, final UserId userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
         var post = postRepository.findById(postId)
@@ -59,7 +59,6 @@ public class CommentService {
 
     @Transactional
     public CommentResponse getComment(final CommentId commentId) {
-        System.out.println("-------------------------------- commentId : "+commentId.getCommentId());
         final Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
