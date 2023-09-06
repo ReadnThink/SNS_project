@@ -4,6 +4,7 @@ import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.config.exception.InvalidRequest;
 import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,9 +23,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private PostId id;
     private String content;
     private String title;
     @ManyToOne
@@ -41,7 +41,10 @@ public class Post {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Post(final Long id, final String content, final String title, User user) {
+    public Post(PostId id, final String content, final String title, User user) {
+        if (id == null) {
+            id = new PostId();
+        }
         this.id = id;
         this.content = content;
         this.title = title;
@@ -61,8 +64,8 @@ public class Post {
         this.user = user;
     }
 
-    public void isSameUser(final Long userId) {
-        if (this.user == null || this.user.getId() != userId ) {
+    public void isSameUser(final UserId userId) {
+        if (this.user == null || !this.user.getId().equals(userId) ) {
             throw new UserNotMatch();
         }
     }

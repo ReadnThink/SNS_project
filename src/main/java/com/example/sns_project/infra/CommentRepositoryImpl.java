@@ -2,6 +2,7 @@ package com.example.sns_project.infra;
 
 import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.domain.comment.entity.Comment;
+import com.example.sns_project.domain.comment.entity.CommentId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @PersistenceContext
     private EntityManager entityManager;
     @Override
-    public Optional<Comment> findById(final Long id) {
+    public Optional<Comment> findById(final CommentId id) {
         try {
             return Optional.of(entityManager.find(Comment.class, id));
         } catch (Exception e) {
@@ -43,7 +44,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public List<Comment> findAll(final Pageable pageable) {
         // todo Pageable 처리 해야함...
         return entityManager.createQuery("select c from Comment c")
-                .setFirstResult(1)
+                .setFirstResult(0)
                 .setMaxResults(10)
                 .getResultList();
     }

@@ -6,8 +6,10 @@ import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,17 +49,23 @@ class PostServiceTest {
     User user;
     Post post;
     PostCreate postCreate;
+
+    UserId userId;
+    PostId postId;
+
     @BeforeEach
     void setUp() {
+        userId = new UserId("TEST");
+        postId = new PostId("1");
         user = User.builder()
-                .id(1L)
+                .id(userId)
                 .email("wanted@wanted.com")
                 .password("12341234")
                 .build();
 
         post = Post.builder()
                 .user(user)
-                .id(1L)
+                .id(postId)
                 .title("제목")
                 .content("내용")
                 .build();
@@ -78,7 +86,7 @@ class PostServiceTest {
         var responseDto = postService.write(PostCreate.builder()
                 .title("제목")
                 .content("내용")
-                .build(), 1L);
+                .build(), userId);
 
         assertThat(responseDto.title()).isEqualTo("제목");
         assertThat(responseDto.content()).isEqualTo("내용");
@@ -91,7 +99,7 @@ class PostServiceTest {
         given(userRepository.findById(any())).willThrow(new UserNotFound());
 
         //when
-        UserNotFound exception = assertThrows(UserNotFound.class, () -> postService.write(postCreate,1L));
+        UserNotFound exception = assertThrows(UserNotFound.class, () -> postService.write(postCreate,userId));
 
         //then
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
@@ -103,7 +111,7 @@ class PostServiceTest {
     void test() {
         //given
         final Post response = Post.builder()
-                .id(1L)
+                .id(postId)
                 .title("Title")
                 .content("Content")
                 .build();
@@ -131,7 +139,7 @@ class PostServiceTest {
         List<Post> response = IntStream.range(1, 6)
                 .mapToObj(i -> {
                     return Post.builder()
-                            .id((long) i)
+                            .id(new PostId(String.valueOf(i)))
                             .title("Title " + i)
                             .content("Content " + i)
                             .build();
@@ -164,7 +172,7 @@ class PostServiceTest {
     @DisplayName("글 수정 실패 - 권한없음")
     void test_edit1() {
         //when
-        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(2L));
+        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(new UserId("UUID")));
 
         //then
         assertEquals(FORBIDDEN, exception.getStatus());
@@ -196,7 +204,7 @@ class PostServiceTest {
          */
 
         //when
-        post.isSameUser(1L);
+        post.isSameUser(userId);
     }
 
     @Test
@@ -209,7 +217,7 @@ class PostServiceTest {
          */
 
         //when
-        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(2L));
+        var exception = assertThrows(UserNotMatch.class, () -> post.isSameUser(new UserId("FAIL")));
 
         //then
         assertEquals(exception.getStatus(), HttpStatus.FORBIDDEN);

@@ -2,6 +2,7 @@ package com.example.sns_project.infra;
 
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
+import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ public class UserRepositoryImpl implements UserRepository {
     private EntityManager entityManager;
 
     @Override
-    public Optional<User> findById(final Long id) {
+    public Optional<User> findById(final UserId id) {
         try {
             return Optional.of(entityManager.find(User.class, id));
         } catch (Exception e) {

@@ -1,8 +1,11 @@
 package com.example.sns_project.application;
 
 import com.example.sns_project.domain.comment.CommentRepository;
+import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.post.PostRepository;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.UserRepository;
+import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.infra.*;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;
@@ -22,7 +25,6 @@ import static java.util.stream.Collectors.*;
 
 @Service
 public class CommentService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -34,7 +36,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse comment(final Long postId, final CommentCreate commentCreate, final Long userId) {
+    public CommentResponse comment(final PostId postId, final CommentCreate commentCreate, final UserId userId) {
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
         var post = postRepository.findById(postId)
@@ -49,19 +51,19 @@ public class CommentService {
         final Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.builder()
-                .commentId(savedComment.getId())
+                .id(savedComment.getId())
                 .comment(savedComment.getContent())
                 .author(savedComment.getAuthor())
                 .build();
     }
 
     @Transactional
-    public CommentResponse getComment(final Long commentId) {
+    public CommentResponse getComment(final CommentId commentId) {
         final Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
         return CommentResponse.builder()
-                .commentId(comment.getId())
+                .id(comment.getId())
                 .comment(comment.getContent())
                 .author(comment.getAuthor())
                 .build();
@@ -71,13 +73,13 @@ public class CommentService {
     public List<CommentResponse> getList(final Pageable pageable) {
         return commentRepository.findAll(pageable).stream()
                 .map(CommentResponse::new)
-                .sorted((c1, c2) -> c2.commentId().compareTo(c1.commentId()))
+                .sorted((c1, c2) -> c2.id().getCommentId().compareTo(c1.id().getCommentId()))
                 .collect(toList());
     }
 
 
     @Transactional
-    public String edit(final Long commentId, final CommentEdit commentEdit, final Long userId) {
+    public String edit(final CommentId commentId, final CommentEdit commentEdit, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 
@@ -90,7 +92,7 @@ public class CommentService {
     }
 
     @Transactional
-    public String delete(final Long commentId, final Long userId) {
+    public String delete(final CommentId commentId, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
 

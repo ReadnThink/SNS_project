@@ -3,6 +3,7 @@ package com.example.sns_project.domain.comment.entity;
 import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,9 +21,8 @@ import java.util.Arrays;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private CommentId id;
 
     private String author;
 
@@ -39,7 +39,11 @@ public class Comment {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Comment(final String content, final String author, final Post post) {
+    public Comment(CommentId id, final String content, final String author, final Post post) {
+        if (id == null) {
+            id = new CommentId();
+        }
+        this.id = id;
         this.content = content;
         this.author = author;
         this.post = post;
@@ -62,7 +66,7 @@ public class Comment {
         }
     }
 
-    public boolean isSameUser(final Long userId) {
+    public boolean isSameUser(final UserId userId) {
         isValid();
         return this.post.getUser().getId().equals(userId);
     }

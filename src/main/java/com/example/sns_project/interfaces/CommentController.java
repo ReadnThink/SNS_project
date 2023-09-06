@@ -6,6 +6,8 @@ import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
+import com.example.sns_project.domain.comment.entity.CommentId;
+import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class CommentController {
     }
 
     @PostMapping("/auth/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@PathVariable final Long postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
+    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
         final CommentResponse comment = commentService.comment(postId, commentCreate, loginUser.getUser().getId());
@@ -34,12 +36,13 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@PathVariable final Long commentId){
+    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final CommentId commentId){
         final CommentResponse comment = commentService.getComment(commentId);
 
         return ResponseEntity.ok(ResponseDto.success(comment));
     }
 
+    // todo 전체 댓글 리스트가 아닌 특정 댓글 리스트 API 필요
     @GetMapping("/comments")
     public ResponseEntity<ResponseDto<List<CommentResponse>>> commentList(Pageable pageable){
         final List<CommentResponse> commentResponseList = commentService.getList(pageable);
@@ -48,13 +51,13 @@ public class CommentController {
     }
 
     @PostMapping("/auth/comments/{commentId}")
-    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute CommentId commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
         final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }
 
     @DeleteMapping("/auth/comments/{commentId}")
-    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long commentId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute CommentId commentId, @AuthenticationPrincipal LoginUser loginUser) {
         final String success = commentService.delete(commentId, loginUser.getUser().getId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }

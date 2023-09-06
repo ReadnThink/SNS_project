@@ -4,6 +4,7 @@ import com.example.sns_project.application.PostService;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
@@ -49,10 +50,12 @@ class PostControllerTest {
 
     @Autowired
     UserRepository userRepository;
+    PostId postId;
 
     @BeforeEach
     public void setUp(){
         saveMockUser();
+        postId = new PostId("1");
     }
 
     @Test
@@ -66,7 +69,7 @@ class PostControllerTest {
                 .build();
 
         var postResponse = PostResponse.builder()
-                .id(1L)
+                .id(postId)
                 .title("제목")
                 .content("내용")
                 .build();
@@ -79,7 +82,7 @@ class PostControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
-                .andExpect(jsonPath("$.data.id").value(1L))
+                .andExpect(jsonPath("$.data.id.postId").value(postId.getPostId()))
                 .andExpect(jsonPath("$.data.title").value("제목"))
                 .andExpect(jsonPath("$.data.content").value("내용"))
                 .andDo(print())
@@ -145,9 +148,9 @@ class PostControllerTest {
     @Test
     @DisplayName("글 1개 조회 - 성공")
     void 조회성공1() throws Exception {
-        Long postId = 1L;
+        String postId_PathValue = "1";
         //when
-        mockMvc.perform(get(POST_GET_URL.getValue(), postId)
+        mockMvc.perform(get(POST_GET_URL.getValue(), postId_PathValue)
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -155,22 +158,21 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andDo(print())
         ;
-        verify(postService).get(1L);
+        verify(postService).get(postId);
     }
 
     @Test
     @DisplayName("글 1개 조회 - 실패")
     void 조회실패() throws Exception {
-        Long postId = 1L;
-
         //given
+        String postId_PathValue = "1";
         final CustomApiException customApiException = new PostNotFound();
 
         //stub
         given(postService.get(postId)).willThrow(customApiException);
 
         //when
-        mockMvc.perform(get(POST_GET_URL.getValue(), postId)
+        mockMvc.perform(get(POST_GET_URL.getValue(), postId_PathValue)
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isNotFound())
@@ -178,7 +180,7 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andDo(print())
         ;
-        verify(postService).get(1L);
+        verify(postService).get(postId);
     }
 
     @Test
