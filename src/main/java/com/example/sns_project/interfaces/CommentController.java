@@ -6,6 +6,7 @@ import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
+import com.example.sns_project.domain.comment.entity.CommentId;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@PathVariable final Long commentId){
+    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final CommentId commentId){
         final CommentResponse comment = commentService.getComment(commentId);
 
         return ResponseEntity.ok(ResponseDto.success(comment));
@@ -49,13 +50,13 @@ public class CommentController {
     }
 
     @PostMapping("/auth/comments/{commentId}")
-    public ResponseEntity<ResponseDto<String>> edit(@PathVariable Long commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute CommentId commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
         final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }
 
     @DeleteMapping("/auth/comments/{commentId}")
-    public ResponseEntity<ResponseDto<String>> delete(@PathVariable Long commentId, @AuthenticationPrincipal LoginUser loginUser) {
+    public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute CommentId commentId, @AuthenticationPrincipal LoginUser loginUser) {
         final String success = commentService.delete(commentId, loginUser.getUser().getId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }

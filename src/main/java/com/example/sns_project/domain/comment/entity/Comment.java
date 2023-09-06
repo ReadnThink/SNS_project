@@ -21,9 +21,8 @@ import java.util.Arrays;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private CommentId id;
 
     private String author;
 
@@ -40,7 +39,11 @@ public class Comment {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Comment(final String content, final String author, final Post post) {
+    public Comment(CommentId id, final String content, final String author, final Post post) {
+        if (id == null) {
+            id = new CommentId();
+        }
+        this.id = id;
         this.content = content;
         this.author = author;
         this.post = post;
