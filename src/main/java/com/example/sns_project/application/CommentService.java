@@ -56,6 +56,7 @@ public class CommentService {
                 .id(savedComment.getId())
                 .comment(savedComment.getContent())
                 .author(savedComment.getAuthor())
+                .lastModifiedAt(savedComment.getLastModifiedAt())
                 .build();
     }
 
