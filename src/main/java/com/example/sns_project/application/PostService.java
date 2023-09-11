@@ -11,6 +11,7 @@ import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,9 +62,12 @@ public class PostService {
 
     @Transactional
     public List<PostResponse> getList(Pageable pageable) {
-        return postRepository.findAll(pageable).stream()
+        return postRepository.
+                findAll(PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize())
+                ).stream()
                 .map(PostResponse::new)
-                .sorted((c1, c2) -> c2.id().getPostId().compareTo(c1.id().getPostId()))
                 .collect(toList());
     }
 

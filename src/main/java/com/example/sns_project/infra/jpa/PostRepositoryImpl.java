@@ -1,4 +1,4 @@
-package com.example.sns_project.infra;
+package com.example.sns_project.infra.jpa;
 
 import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.entity.Post;
@@ -37,10 +37,9 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> findAll(final Pageable pageable) {
-        // todo Pageable 처리 해야함...
-        return entityManager.createQuery("select p from Post p")
-                .setFirstResult(0)
-                .setMaxResults(10)
+        return entityManager.createQuery("select p from Post p order by p.createdAt desc")
+                .setFirstResult(pageable.getPageNumber())
+                .setMaxResults(pageable.getPageSize())
                 .getResultList();
     }
 

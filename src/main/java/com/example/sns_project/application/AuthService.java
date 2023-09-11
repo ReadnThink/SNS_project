@@ -5,7 +5,7 @@ import com.example.sns_project.domain.user.dto.SignUp;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserRole;
 import com.example.sns_project.domain.user.exception.AlreadyExistsEmailException;
-import com.example.sns_project.infra.UserRepositoryImpl;
+import com.example.sns_project.infra.jpa.UserRepositoryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
