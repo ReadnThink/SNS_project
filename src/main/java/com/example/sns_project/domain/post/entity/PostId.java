@@ -1,36 +1,26 @@
 package com.example.sns_project.domain.post.entity;
 
+import com.example.sns_project.domain.Identifier;
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.Objects;
+import java.util.UUID;
 
+@EqualsAndHashCode
 @Getter
 @Embeddable
-public class PostId {
-    public static Long POST_SEQUENCE = 0L;
-    private Long postId;
-
-    public PostId(final String postId) {
-        this.postId = Long.valueOf(postId);
-    }
+public class PostId extends Identifier {
+    private final String id;
 
     public PostId() {
-        this.postId = POST_SEQUENCE++;
+        this.id = super.id;
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final PostId postId1 = (PostId) o;
-
-        return Objects.equals(postId, postId1.postId);
-    }
-
-    @Override
-    public int hashCode() {
-        return postId != null ? postId.hashCode() : 0;
+    /**
+     * for Controller Constructor
+     */
+    public PostId(final String id) {
+        this.id = id;
     }
 }

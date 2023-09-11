@@ -1,37 +1,27 @@
 package com.example.sns_project.domain.user.entity;
 
+import com.example.sns_project.domain.Identifier;
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
+@EqualsAndHashCode
 @Getter
 @Embeddable
-public class UserId implements Serializable {
+public class UserId extends Identifier {
+    private String id;
 
-    private String UserId;
     public UserId() {
-        UserId = String.valueOf(UUID.randomUUID());
+        id = super.id;
     }
 
+    /**
+     * for Controller Constructor
+     */
     public UserId(String uuid) {
-        UserId = uuid;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final com.example.sns_project.domain.user.entity.UserId userid = (com.example.sns_project.domain.user.entity.UserId) o;
-
-        return Objects.equals(UserId, userid.UserId);
-    }
-
-    @Override
-    public int hashCode() {
-        return UserId != null ? UserId.hashCode() : 0;
+        id = uuid;
     }
 }
