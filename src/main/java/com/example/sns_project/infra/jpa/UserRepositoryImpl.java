@@ -1,4 +1,4 @@
-package com.example.sns_project.infra;
+package com.example.sns_project.infra.jpa;
 
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.User;
@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-
     @PersistenceContext
     private EntityManager entityManager;
 

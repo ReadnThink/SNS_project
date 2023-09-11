@@ -6,7 +6,6 @@ import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
-import com.example.sns_project.infra.*;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
@@ -15,7 +14,10 @@ import com.example.sns_project.domain.comment.exception.CommentNotFound;
 import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
+import com.example.sns_project.infra.jpa.CommentRepositoryImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,9 +73,13 @@ public class CommentService {
 
     @Transactional
     public List<CommentResponse> getList(final Pageable pageable) {
-        return commentRepository.findAll(pageable).stream()
+        return commentRepository.
+                findAll(PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize())
+                )
+                .stream()
                 .map(CommentResponse::new)
-                .sorted((c1, c2) -> c2.id().getCommentId().compareTo(c1.id().getCommentId()))
                 .collect(toList());
     }
 

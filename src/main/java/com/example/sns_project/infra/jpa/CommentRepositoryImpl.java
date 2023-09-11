@@ -1,4 +1,4 @@
-package com.example.sns_project.infra;
+package com.example.sns_project.infra.jpa;
 
 import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.domain.comment.entity.Comment;
@@ -6,6 +6,7 @@ import com.example.sns_project.domain.comment.entity.CommentId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -42,10 +43,9 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<Comment> findAll(final Pageable pageable) {
-        // todo Pageable 처리 해야함...
-        return entityManager.createQuery("select c from Comment c")
-                .setFirstResult(0)
-                .setMaxResults(10)
+        return entityManager.createQuery("select c from Comment c ORDER BY c.createdAt desc")
+                .setFirstResult(pageable.getPageNumber())
+                .setMaxResults(pageable.getPageSize())
                 .getResultList();
     }
 }
