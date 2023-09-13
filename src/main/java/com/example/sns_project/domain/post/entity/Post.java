@@ -1,8 +1,8 @@
 package com.example.sns_project.domain.post.entity;
 
 import com.example.sns_project.config.util.BanWords;
-import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
@@ -16,39 +16,33 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
-
     @EmbeddedId
-    private PostId id;
+    @Column(name = "postId")
+    private PostId postId;
     private String content;
     private String title;
-    @ManyToOne
-    @JoinColumn
-    private User user;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
-    private List<Comment> comments;
-
+    private CommentId commentId;
+    private UserId userId;
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Post(PostId id, final String content, final String title, User user) {
-        if (id == null) {
-            id = new PostId();
+    public Post(PostId postId, final String content, final String title, UserId userId, CommentId commentId) {
+        if (postId == null) {
+            postId = new PostId();
         }
-        this.id = id;
+        this.postId = postId;
         this.content = content;
         this.title = title;
-        this.user = user;
+        this.userId = userId;
+        this.commentId = commentId;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
     }
@@ -60,12 +54,12 @@ public class Post {
         this.lastModifiedAt = LocalDateTime.now();
     }
 
-    public void addUser(final User user) {
-        this.user = user;
+    public void addUser(final UserId userId) {
+        this.userId = userId;
     }
 
     public void isSameUser(final UserId userId) {
-        if (this.user == null || !this.user.getId().equals(userId) ) {
+        if (this.userId == null || !this.userId.equals(userId) ) {
             throw new UserNotMatch();
         }
     }

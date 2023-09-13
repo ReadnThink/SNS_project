@@ -6,9 +6,8 @@ import lombok.Builder;
 
 
 public record PostResponse (PostId id, String title, String content){
-
     public PostResponse(Post post) {
-        this(post.getId(), post.getTitle(), post.getContent());
+        this(post.getPostId(), post.getTitle(), post.getContent());
     }
 
     @Builder

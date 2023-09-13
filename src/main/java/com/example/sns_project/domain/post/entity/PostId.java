@@ -5,22 +5,20 @@ import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @EqualsAndHashCode
 @Getter
 @Embeddable
 public class PostId extends Identifier {
-    private final String id;
+    private final String postId;
 
     public PostId() {
-        this.id = super.id;
+        this.postId = super.makeIdentifier();
     }
 
     /**
      * for Controller Constructor
      */
-    public PostId(final String id) {
-        this.id = id;
+    public PostId(final String uuid) {
+        this.postId = uuid;
     }
 }

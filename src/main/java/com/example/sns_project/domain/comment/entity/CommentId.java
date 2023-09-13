@@ -5,23 +5,20 @@ import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 @EqualsAndHashCode
 @Getter
 @Embeddable
 public class CommentId extends Identifier {
-    private final String id;
+    private final String commentId;
 
     public CommentId() {
-        id = super.id;
+        commentId = super.makeIdentifier();
     }
 
     /**
      * for Controller Constructor
      */
-    public CommentId(final String id) {
-        this.id = id;
+    public CommentId(final String uuid) {
+        this.commentId = uuid;
     }
 }

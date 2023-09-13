@@ -5,10 +5,7 @@ import java.util.UUID;
 
 
 public abstract class Identifier implements Serializable {
-
-    public final String id;
-
-    public Identifier() {
-        id = String.valueOf(UUID.randomUUID());
+    public String makeIdentifier() {
+        return String.valueOf(UUID.randomUUID());
     }
 }

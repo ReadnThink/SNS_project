@@ -40,10 +40,11 @@ public class PostService {
 
         var post = postRepository.save(postNotValid);
 
-        post.addUser(user);
+        post.addUser(user.getUserId());
+        user.addPost(post.getPostId());
 
         return PostResponse.builder()
-                .id(post.getId())
+                .id(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
@@ -54,7 +55,7 @@ public class PostService {
         final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
-                .id(post.getId())
+                .id(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();

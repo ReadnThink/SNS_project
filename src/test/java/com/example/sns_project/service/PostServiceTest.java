@@ -124,7 +124,7 @@ class PostServiceTest {
         given(postRepository.findById(any())).willReturn(Optional.ofNullable(response));
 
         //when
-        final PostResponse postResponse = postService.get(response.getId());
+        final PostResponse postResponse = postService.get(response.getPostId());
 
         //then
         assertThat(postResponse).isNotNull();

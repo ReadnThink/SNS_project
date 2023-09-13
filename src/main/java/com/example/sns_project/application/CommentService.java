@@ -17,7 +17,6 @@ import com.example.sns_project.domain.user.exception.UserNotMatch;
 import com.example.sns_project.infra.jpa.CommentRepositoryImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,15 +44,16 @@ public class CommentService {
                 .orElseThrow(PostNotFound::new);
 
         final Comment comment = Comment.builder()
+                .userId(user.getUserId())
                 .author(user.getEmail())
                 .content(commentCreate.content())
-                .post(post)
+                .postId(post.getPostId())
                 .build();
 
         final Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.builder()
-                .id(savedComment.getId())
+                .id(savedComment.getCommentId())
                 .comment(savedComment.getContent())
                 .author(savedComment.getAuthor())
                 .lastModifiedAt(savedComment.getLastModifiedAt())
@@ -66,7 +66,7 @@ public class CommentService {
                 .orElseThrow(CommentNotFound::new);
 
         return CommentResponse.builder()
-                .id(comment.getId())
+                .id(comment.getCommentId())
                 .comment(comment.getContent())
                 .author(comment.getAuthor())
                 .build();

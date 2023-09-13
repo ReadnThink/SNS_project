@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(JwtVO.HEADER, jwtToken);
 
         LoginRespDto loginRespDto = LoginRespDto.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .email(user.getEmail())
                 .build();
 
