@@ -52,7 +52,8 @@ public class PostService {
 
     @Transactional
     public PostResponse get(final PostId postId) {
-        final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
+        final Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
                 .id(post.getPostId())

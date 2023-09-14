@@ -23,7 +23,6 @@ public class Comment {
     @EmbeddedId
     @Column(name = "commentId")
     private CommentId commentId;
-    private UserId userId;
     private String author;
     private String content;
     private PostId postId;
@@ -33,12 +32,11 @@ public class Comment {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Comment(CommentId commentId, final UserId userId, final String content, final String author, final PostId postId) {
+    public Comment(CommentId commentId, final String content, final String author, final PostId postId) {
         if (commentId == null) {
             commentId = new CommentId();
         }
         this.commentId = commentId;
-        this.userId = userId;
         this.content = content;
         this.author = author;
         this.postId = postId;
@@ -61,9 +59,9 @@ public class Comment {
         }
     }
 
-    public boolean isSameUser(final UserId userId) {
+    public boolean isSameUser(final String userEmail) {
         isValid();
-        return this.userId.equals(userId);
+        return this.author.equals(userEmail);
     }
 
     public void editComment(final String comment) {

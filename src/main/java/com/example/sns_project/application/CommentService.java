@@ -44,7 +44,6 @@ public class CommentService {
                 .orElseThrow(PostNotFound::new);
 
         final Comment comment = Comment.builder()
-                .userId(user.getUserId())
                 .author(user.getEmail())
                 .content(commentCreate.content())
                 .postId(post.getPostId())
@@ -89,8 +88,10 @@ public class CommentService {
     public String edit(final CommentId commentId, final CommentEdit commentEdit, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
 
-        if (!comment.isSameUser(userId)){
+        if (!comment.isSameUser(user.getEmail())){
             throw new UserNotMatch();
         }
 
@@ -102,8 +103,10 @@ public class CommentService {
     public String delete(final CommentId commentId, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
 
-        if (!comment.isSameUser(userId)){
+        if (!comment.isSameUser(user.getEmail())){
             throw new UserNotMatch();
         }
 
