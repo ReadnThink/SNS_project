@@ -1,6 +1,8 @@
 package com.example.sns_project.domain.post.entity;
 
 import com.example.sns_project.domain.Identifier;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,17 +10,19 @@ import lombok.Getter;
 @EqualsAndHashCode
 @Getter
 @Embeddable
+@AttributeOverride(name = "id", column = @Column(name = "postId"))
 public class PostId extends Identifier {
-    private final String postId;
+    private final String id;
 
     public PostId() {
-        this.postId = super.makeIdentifier();
+        id = super.getId();
     }
 
     /**
      * for Controller Constructor
      */
     public PostId(final String uuid) {
-        this.postId = uuid;
+        super(uuid);
+        id = super.getId();
     }
 }

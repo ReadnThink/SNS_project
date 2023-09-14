@@ -44,7 +44,7 @@ public class PostService {
         user.addPost(post.getPostId());
 
         return PostResponse.builder()
-                .id(post.getPostId())
+                .postId(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
@@ -56,7 +56,7 @@ public class PostService {
                 .orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
-                .id(post.getPostId())
+                .postId(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();

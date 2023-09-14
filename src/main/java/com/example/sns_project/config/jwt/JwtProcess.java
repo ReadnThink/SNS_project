@@ -20,7 +20,7 @@ public class JwtProcess {
         String jwtToken = JWT.create()
                 .withSubject("wanted")
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtVO.EXPIRATION_TIM))
-                .withClaim("id", loginUser.getUser().getUserId().getUserId())
+                .withClaim("id", loginUser.getUser().getUserId().getId())
                 .withClaim("email", loginUser.getUser().getEmail())
                 .withClaim("role", loginUser.getUser().getUserRole().name())
                 .sign(Algorithm.HMAC512(secretKey));

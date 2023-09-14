@@ -52,7 +52,7 @@ public class CommentService {
         final Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.builder()
-                .id(savedComment.getCommentId())
+                .commentId(savedComment.getCommentId())
                 .comment(savedComment.getContent())
                 .author(savedComment.getAuthor())
                 .lastModifiedAt(savedComment.getLastModifiedAt())
@@ -65,7 +65,7 @@ public class CommentService {
                 .orElseThrow(CommentNotFound::new);
 
         return CommentResponse.builder()
-                .id(comment.getCommentId())
+                .commentId(comment.getCommentId())
                 .comment(comment.getContent())
                 .author(comment.getAuthor())
                 .build();
