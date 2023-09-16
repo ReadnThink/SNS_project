@@ -12,17 +12,12 @@ import lombok.Getter;
 @Embeddable
 @AttributeOverride(name = "id", column = @Column(name = "postId"))
 public class PostId extends Identifier {
-    private final String id;
-
-    public PostId() {
-        id = super.getId();
-    }
+    public PostId() {}
 
     /**
      * for Controller Constructor
      */
     public PostId(final String uuid) {
         super(uuid);
-        id = super.getId();
     }
 }
