@@ -10,6 +10,7 @@ import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
+import com.example.sns_project.infra.message.MessageRouterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,29 +26,19 @@ import static java.util.stream.Collectors.toList;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final MessageRouterService messageRouterService;
 
-    public PostService(final PostRepository postRepository, final UserRepository userRepository) {
+    public PostService(final PostRepository postRepository, final UserRepository userRepository, final MessageRouterService messageRouterService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.messageRouterService = messageRouterService;
     }
 
     @Transactional
-    public PostResponse write(PostCreate postCreate, final UserId userId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
-        final Post postNotValid = postCreate.toEntity();
-        postNotValid.isValid();
-
-        var post = postRepository.save(postNotValid);
-
-        post.addUser(user.getUserId());
-        user.addPost(post.getPostId());
-
-        return PostResponse.builder()
-                .postId(post.getPostId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
+    public boolean write(PostCreate postCreate, final UserId userId) {
+        // todo service는 필요 없는가?
+        messageRouterService.routeCreatePostRequest(postCreate, userId);
+        return true;
     }
 
     @Transactional

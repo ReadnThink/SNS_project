@@ -66,6 +66,8 @@ dependencies {
     // sql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // Spring Integration
+    implementation 'org.springframework.boot:spring-boot-starter-integration'
 }
 
 tasks.named('test') {

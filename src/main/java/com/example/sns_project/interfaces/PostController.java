@@ -31,9 +31,8 @@ public class PostController {
     public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-
-        final PostResponse write = postService.write(postCreate, loginUser.getUser().getUserId());
-        return ResponseEntity.ok(ResponseDto.success(write));
+        postService.write(postCreate, loginUser.getUser().getUserId());
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @GetMapping("/posts/{postId}")
