@@ -22,7 +22,7 @@ public record PostCreate(
 
     public Post toEntity() {
         return Post.builder()
-                .id(new PostId())
+                .postId(new PostId())
                 .title(this.title)
                 .content(this.content)
                 .build();

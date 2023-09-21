@@ -82,7 +82,7 @@ class PostControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
-                .andExpect(jsonPath("$.data.id.postId").value(postId.getId()))
+                .andExpect(jsonPath("$.data.id.postId").value(postId.getPostId()))
                 .andExpect(jsonPath("$.data.title").value("제목"))
                 .andExpect(jsonPath("$.data.content").value("내용"))
                 .andDo(print())

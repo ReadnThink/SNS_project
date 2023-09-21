@@ -4,7 +4,6 @@ import com.example.sns_project.application.PostService;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
-import com.example.sns_project.domain.post.dto.PostSearch;
 import com.example.sns_project.config.auth.LoginUser;
 import com.example.sns_project.config.util.ResponseDto;
 import com.example.sns_project.domain.post.entity.PostId;
@@ -33,7 +32,7 @@ public class PostController {
             , @AuthenticationPrincipal LoginUser loginUser)
     {
 
-        final PostResponse write = postService.write(postCreate, loginUser.getUser().getId());
+        final PostResponse write = postService.write(postCreate, loginUser.getUser().getUserId());
         return ResponseEntity.ok(ResponseDto.success(write));
     }
 
@@ -55,14 +54,14 @@ public class PostController {
     public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute PostId postId, @RequestBody PostEdit postEdit
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        postService.edit(postId, postEdit, loginUser.getUser().getId());
+        postService.edit(postId, postEdit, loginUser.getUser().getUserId());
 
         return ResponseEntity.ok(ResponseDto.success());
     }
 
     @DeleteMapping("/auth/posts/{postId}")
     public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute PostId postId, @AuthenticationPrincipal LoginUser loginUser) {
-        postService.delete(postId, loginUser.getUser().getId());
+        postService.delete(postId, loginUser.getUser().getUserId());
 
         return ResponseEntity.ok(ResponseDto.success());
     }

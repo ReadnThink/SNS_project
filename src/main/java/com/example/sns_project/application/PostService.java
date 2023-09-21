@@ -40,10 +40,11 @@ public class PostService {
 
         var post = postRepository.save(postNotValid);
 
-        post.addUser(user);
+        post.addUser(user.getUserId());
+        user.addPost(post.getPostId());
 
         return PostResponse.builder()
-                .id(post.getId())
+                .postId(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
@@ -51,10 +52,11 @@ public class PostService {
 
     @Transactional
     public PostResponse get(final PostId postId) {
-        final Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
+        final Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
-                .id(post.getId())
+                .postId(post.getPostId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();

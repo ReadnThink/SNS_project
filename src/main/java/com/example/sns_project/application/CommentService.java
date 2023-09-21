@@ -17,7 +17,6 @@ import com.example.sns_project.domain.user.exception.UserNotMatch;
 import com.example.sns_project.infra.jpa.CommentRepositoryImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,13 +46,13 @@ public class CommentService {
         final Comment comment = Comment.builder()
                 .author(user.getEmail())
                 .content(commentCreate.content())
-                .post(post)
+                .postId(post.getPostId())
                 .build();
 
         final Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.builder()
-                .id(savedComment.getId())
+                .commentId(savedComment.getCommentId())
                 .comment(savedComment.getContent())
                 .author(savedComment.getAuthor())
                 .lastModifiedAt(savedComment.getLastModifiedAt())
@@ -66,7 +65,7 @@ public class CommentService {
                 .orElseThrow(CommentNotFound::new);
 
         return CommentResponse.builder()
-                .id(comment.getId())
+                .commentId(comment.getCommentId())
                 .comment(comment.getContent())
                 .author(comment.getAuthor())
                 .build();
@@ -89,8 +88,10 @@ public class CommentService {
     public String edit(final CommentId commentId, final CommentEdit commentEdit, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
 
-        if (!comment.isSameUser(userId)){
+        if (!comment.isSameUser(user.getEmail())){
             throw new UserNotMatch();
         }
 
@@ -102,8 +103,10 @@ public class CommentService {
     public String delete(final CommentId commentId, final UserId userId) {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
 
-        if (!comment.isSameUser(userId)){
+        if (!comment.isSameUser(user.getEmail())){
             throw new UserNotMatch();
         }
 

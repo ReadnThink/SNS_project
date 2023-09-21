@@ -30,7 +30,7 @@ public class CommentController {
     public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        final CommentResponse comment = commentService.comment(postId, commentCreate, loginUser.getUser().getId());
+        final CommentResponse comment = commentService.comment(postId, commentCreate, loginUser.getUser().getUserId());
 
         return ResponseEntity.ok(ResponseDto.success(comment));
     }
@@ -52,13 +52,13 @@ public class CommentController {
 
     @PostMapping("/auth/comments/{commentId}")
     public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute CommentId commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
-        final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getId());
+        final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getUserId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }
 
     @DeleteMapping("/auth/comments/{commentId}")
     public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute CommentId commentId, @AuthenticationPrincipal LoginUser loginUser) {
-        final String success = commentService.delete(commentId, loginUser.getUser().getId());
+        final String success = commentService.delete(commentId, loginUser.getUser().getUserId());
         return ResponseEntity.ok(ResponseDto.success(success));
     }
 }

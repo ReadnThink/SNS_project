@@ -1,8 +1,8 @@
 package com.example.sns_project.domain.comment.entity;
 
 import com.example.sns_project.config.util.BanWords;
-import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,33 +20,26 @@ import java.util.Arrays;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
-
     @EmbeddedId
-    private CommentId id;
-
+    @Column(name = "commentId")
+    private CommentId commentId;
     private String author;
-
     private String content;
-
-    @ManyToOne
-    @JoinColumn
-    private Post post;
-
+    private PostId postId;
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Comment(CommentId id, final String content, final String author, final Post post) {
-        if (id == null) {
-            id = new CommentId();
+    public Comment(CommentId commentId, final String content, final String author, final PostId postId) {
+        if (commentId == null) {
+            commentId = new CommentId();
         }
-        this.id = id;
+        this.commentId = commentId;
         this.content = content;
         this.author = author;
-        this.post = post;
+        this.postId = postId;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
         isValid();
@@ -66,9 +59,9 @@ public class Comment {
         }
     }
 
-    public boolean isSameUser(final UserId userId) {
+    public boolean isSameUser(final String userEmail) {
         isValid();
-        return this.post.getUser().getId().equals(userId);
+        return this.author.equals(userEmail);
     }
 
     public void editComment(final String comment) {

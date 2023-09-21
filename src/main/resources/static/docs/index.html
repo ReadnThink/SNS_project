@@ -439,13 +439,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
 <body class="book toc2 toc-left">
-<div id="header">
+<div postId="header">
 <h1>게시판 API</h1>
 <div class="details">
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
+<span postId="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
+<div postId="toc" class="toc2">
+<div postId="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_글_단건조회">글 단건조회</a>
 <ul class="sectlevel2">
@@ -462,12 +462,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 </div>
-<div id="content">
+<div postId="content">
 <div class="sect1">
-<h2 id="_글_단건조회"><a class="link" href="#_글_단건조회">글 단건조회</a></h2>
+<h2 postId="_글_단건조회"><a class="link" href="#_글_단건조회">글 단건조회</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_요청"><a class="link" href="#_요청">요청</a></h3>
+<h3 postId="_요청"><a class="link" href="#_요청">요청</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /posts/1 HTTP/1.1
@@ -496,7 +496,7 @@ Host: api.board.com</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_응답"><a class="link" href="#_응답">응답</a></h3>
+<h3 postId="_응답"><a class="link" href="#_응답">응답</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -510,7 +510,7 @@ Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
 Content-Length: 84
 
-{"message":"SUCCESS","data":{"id":{"postId":1},"title":"제목","content":"내용"}}</code></pre>
+{"message":"SUCCESS","data":{"postId":{"postId":1},"title":"제목","content":"내용"}}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -533,7 +533,7 @@ Content-Length: 84
 <td class="tableblock halign-left valign-top"><p class="tableblock">SUCCESS</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.id.postId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postId.postId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
@@ -553,10 +553,10 @@ Content-Length: 84
 </div>
 </div>
 <div class="sect1">
-<h2 id="_글_작성"><a class="link" href="#_글_작성">글 작성</a></h2>
+<h2 postId="_글_작성"><a class="link" href="#_글_작성">글 작성</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_요청_2"><a class="link" href="#_요청_2">요청</a></h3>
+<h3 postId="_요청_2"><a class="link" href="#_요청_2">요청</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /auth/posts HTTP/1.1
@@ -604,7 +604,7 @@ Host: api.board.com
 </table>
 </div>
 <div class="sect2">
-<h3 id="_응답_2"><a class="link" href="#_응답_2">응답</a></h3>
+<h3 postId="_응답_2"><a class="link" href="#_응답_2">응답</a></h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -618,15 +618,15 @@ Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
 Content-Length: 84
 
-{"message":"SUCCESS","data":{"id":{"postId":0},"title":"제목","content":"내용"}}</code></pre>
+{"message":"SUCCESS","data":{"postId":{"postId":0},"title":"제목","content":"내용"}}</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
+<div postId="footer">
+<div postId="footer-text">
 Version 0.0.1-SNAPSHOT<br>
 Last updated 2023-08-07 18:59:11 +0900
 </div>
