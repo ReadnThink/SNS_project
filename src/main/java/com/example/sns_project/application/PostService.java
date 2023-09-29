@@ -10,15 +10,19 @@ import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
-import com.example.sns_project.infra.message.MessageRouterService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
+import static com.example.sns_project.config.messaging.command.CommandConfig.*;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -26,20 +30,34 @@ import static java.util.stream.Collectors.toList;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final MessageRouterService messageRouterService;
+    private final Executor executor;
 
-    public PostService(final PostRepository postRepository, final UserRepository userRepository, final MessageRouterService messageRouterService) {
+    public PostService(final PostRepository postRepository, final UserRepository userRepository, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
-        this.messageRouterService = messageRouterService;
+        this.executor = executor;
     }
 
     @Transactional
-    public boolean write(PostCreate postCreate, final UserId userId) {
-        // todo service는 필요 없는가?
-        messageRouterService.routeCreatePostRequest(postCreate, userId);
-        return true;
+    @ServiceActivator(inputChannel = "PostCreate")
+    public void postCreate(Message<PostCreate> message) {
+        executor.execute(() -> {
+            final PostCreate postCreate = message.getPayload();
+            final UserId userId = message.getHeaders().get("userId", UserId.class);
+            log.info(postCreate.getClass().getSimpleName());
+            var user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+            final Post postNotValid = postCreate.toEntity();
+            postNotValid.isValid();
+
+            var post = postRepository.save(postNotValid);
+
+            post.addUser(user.getUserId());
+            user.addPost(post.getPostId());
+        });
     }
+
+
 
     @Transactional
     public PostResponse get(final PostId postId) {
