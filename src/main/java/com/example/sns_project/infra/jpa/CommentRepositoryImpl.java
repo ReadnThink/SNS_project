@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
+    @Transactional
     public Comment save(final Comment comment) {
         entityManager.persist(comment);
         return comment;

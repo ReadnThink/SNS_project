@@ -11,13 +11,18 @@ import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
+import static com.example.sns_project.config.messaging.command.CommandConfig.*;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -25,30 +30,34 @@ import static java.util.stream.Collectors.toList;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final Executor executor;
 
-    public PostService(final PostRepository postRepository, final UserRepository userRepository) {
+    public PostService(final PostRepository postRepository, final UserRepository userRepository, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.executor = executor;
     }
 
     @Transactional
-    public PostResponse write(PostCreate postCreate, final UserId userId) {
-        var user = userRepository.findById(userId)
-                .orElseThrow(UserNotFound::new);
-        final Post postNotValid = postCreate.toEntity();
-        postNotValid.isValid();
+    @ServiceActivator(inputChannel = "PostCreate")
+    public void postCreate(Message<PostCreate> message) {
+        executor.execute(() -> {
+            final PostCreate postCreate = message.getPayload();
+            final UserId userId = message.getHeaders().get("userId", UserId.class);
+            log.info(postCreate.getClass().getSimpleName());
+            var user = userRepository.findById(userId)
+                    .orElseThrow(UserNotFound::new);
+            final Post postNotValid = postCreate.toEntity();
+            postNotValid.isValid();
 
-        var post = postRepository.save(postNotValid);
+            var post = postRepository.save(postNotValid);
 
-        post.addUser(user.getUserId());
-        user.addPost(post.getPostId());
-
-        return PostResponse.builder()
-                .postId(post.getPostId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
+            post.addUser(user.getUserId());
+            user.addPost(post.getPostId());
+        });
     }
+
+
 
     @Transactional
     public PostResponse get(final PostId postId) {

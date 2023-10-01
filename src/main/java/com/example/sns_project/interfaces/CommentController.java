@@ -1,6 +1,7 @@
 package com.example.sns_project.interfaces;
 
 import com.example.sns_project.application.CommentService;
+import com.example.sns_project.application.gateway.CommendGateway;
 import com.example.sns_project.domain.comment.dto.CommentCreate;
 import com.example.sns_project.domain.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
@@ -21,22 +22,23 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommendGateway commendGateway;
 
-    public CommentController(final CommentService commentService) {
+    public CommentController(final CommentService commentService, final CommendGateway commendGateway) {
         this.commentService = commentService;
+        this.commendGateway = commendGateway;
     }
 
     @PostMapping("/auth/posts/{postId}/comments")
     public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        final CommentResponse comment = commentService.comment(postId, commentCreate, loginUser.getUser().getUserId());
-
-        return ResponseEntity.ok(ResponseDto.success(comment));
+        commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId);
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @GetMapping("/comments/{commentId}")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final CommentId commentId){
+    public ResponseEntity<ResponseDto<CommentResponse>> getComment(@ModelAttribute final CommentId commentId){
         final CommentResponse comment = commentService.getComment(commentId);
 
         return ResponseEntity.ok(ResponseDto.success(comment));

@@ -1,5 +1,6 @@
 package com.example.sns_project.interfaces;
 
+import com.example.sns_project.application.gateway.CommendGateway;
 import com.example.sns_project.application.PostService;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
@@ -22,18 +23,19 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final CommendGateway commendGateway;
 
-    public PostController(final PostService postService) {
+    public PostController(final PostService postService, final CommendGateway commendGateway) {
         this.postService = postService;
+        this.commendGateway = commendGateway;
     }
 
     @PostMapping("/auth/posts")
     public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-
-        final PostResponse write = postService.write(postCreate, loginUser.getUser().getUserId());
-        return ResponseEntity.ok(ResponseDto.success(write));
+        commendGateway.request(postCreate, loginUser.getUser().getUserId());
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @GetMapping("/posts/{postId}")

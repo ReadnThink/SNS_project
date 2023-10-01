@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    @Transactional
     public Post save(final Post post) {
         entityManager.persist(post);
         return post;
