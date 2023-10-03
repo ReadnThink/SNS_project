@@ -1,5 +1,8 @@
 package com.example.sns_project.application;
 
+import com.example.sns_project.application.aop.CommandAop;
+import com.example.sns_project.config.messaging.event.Event;
+import com.example.sns_project.config.messaging.event.Events;
 import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.domain.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostEdit;
@@ -22,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import static com.example.sns_project.config.messaging.command.CommandConfig.*;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -39,9 +41,9 @@ public class PostService {
     }
 
     @Transactional
+    @CommandAop
     @ServiceActivator(inputChannel = "PostCreate")
     public void postCreate(Message<PostCreate> message) {
-        executor.execute(() -> {
             final PostCreate postCreate = message.getPayload();
             final UserId userId = message.getHeaders().get("userId", UserId.class);
             log.info(postCreate.getClass().getSimpleName());
@@ -54,7 +56,8 @@ public class PostService {
 
             post.addUser(user.getUserId());
             user.addPost(post.getPostId());
-        });
+
+            Events.register(post);
     }
 
 
@@ -82,6 +85,7 @@ public class PostService {
                 .collect(toList());
     }
 
+    @CommandAop
     @Transactional
     public void edit(PostId id, PostEdit postEdit, UserId userId) {
         var post = postRepository.findById(id)
@@ -96,6 +100,7 @@ public class PostService {
         );
     }
 
+    @CommandAop
     @Transactional
     public void delete(final PostId postId, UserId userId) {
         var post = postRepository.findById(postId)

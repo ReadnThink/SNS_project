@@ -29,7 +29,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
-@EnableWebSecurity(debug = true) // todo debug 운영시 지우기
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 

@@ -6,7 +6,7 @@ import com.example.sns_project.domain.user.entity.UserId;
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.messaging.handler.annotation.Header;
 
-import static com.example.sns_project.config.messaging.command.CommandConfig.*;
+import static com.example.sns_project.config.messaging.MassagingVO.*;
 
 /**
  * return type에 대항 응답 차이
@@ -16,6 +16,6 @@ import static com.example.sns_project.config.messaging.command.CommandConfig.*;
  */
 @MessagingGateway(defaultRequestChannel = COMMAND_GATEWAY_CHANNEL)
 public interface CommendGateway {
-    void request(Command command, @Header(value = COMMAND_POST_USERID) UserId userId);
-    void request(Command command, @Header(value = COMMAND_POST_USERID) UserId userId, @Header(value = COMMAND_COMMENT_POSTID) PostId postId);
+    void request(Command command, @Header(value = MESSAGE_USER_ID) UserId userId);
+    void request(Command command, @Header(value = MESSAGE_USER_ID) UserId userId, @Header(value = MESSAGE_POST_ID) PostId postId);
 }

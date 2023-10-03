@@ -68,6 +68,9 @@ dependencies {
 
     // Spring Integration
     implementation 'org.springframework.boot:spring-boot-starter-integration'
+
+    // aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {

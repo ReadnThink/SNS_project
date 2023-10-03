@@ -10,6 +10,7 @@ import com.example.sns_project.config.util.ResponseDto;
 import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,30 +18,32 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 @RestController
 public class CommentController {
-
     private final CommentService commentService;
     private final CommendGateway commendGateway;
+    private final Executor executor;
 
-    public CommentController(final CommentService commentService, final CommendGateway commendGateway) {
+    public CommentController(final CommentService commentService, final CommendGateway commendGateway, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
         this.commentService = commentService;
         this.commendGateway = commendGateway;
+        this.executor = executor;
     }
 
     @PostMapping("/auth/posts/{postId}/comments")
     public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId);
+        executor.execute(()->
+                commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId));
         return ResponseEntity.ok(ResponseDto.success());
     }
 
     @GetMapping("/comments/{commentId}")
     public ResponseEntity<ResponseDto<CommentResponse>> getComment(@ModelAttribute final CommentId commentId){
         final CommentResponse comment = commentService.getComment(commentId);
-
         return ResponseEntity.ok(ResponseDto.success(comment));
     }
 

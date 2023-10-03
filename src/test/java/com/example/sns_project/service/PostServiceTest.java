@@ -111,7 +111,7 @@ class PostServiceTest {
     void test() {
         //given
         final Post response = Post.builder()
-                .id(postId)
+                .postId(postId)
                 .title("Title")
                 .content("Content")
                 .build();

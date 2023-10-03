@@ -10,6 +10,7 @@ import com.example.sns_project.config.util.ResponseDto;
 import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,24 +18,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 @Slf4j
 @RestController
 public class PostController {
-
     private final PostService postService;
     private final CommendGateway commendGateway;
+    private final Executor executor;
 
-    public PostController(final PostService postService, final CommendGateway commendGateway) {
+    public PostController(final PostService postService, final CommendGateway commendGateway, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
         this.postService = postService;
         this.commendGateway = commendGateway;
+        this.executor = executor;
     }
 
     @PostMapping("/auth/posts")
     public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        commendGateway.request(postCreate, loginUser.getUser().getUserId());
+        executor.execute(() ->
+                commendGateway.request(postCreate, loginUser.getUser().getUserId()));
         return ResponseEntity.ok(ResponseDto.success());
     }
 

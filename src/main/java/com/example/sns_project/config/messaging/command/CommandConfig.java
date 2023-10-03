@@ -8,14 +8,12 @@ import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.messaging.MessageChannel;
 
+import static com.example.sns_project.config.messaging.MassagingVO.COMMAND_GATEWAY_CHANNEL;
+
 @Slf4j
 @Configuration
 @EnableIntegration
 public class CommandConfig {
-    public static final String COMMAND_GATEWAY_CHANNEL = "CommandChannel";
-    public static final String COMMAND_POST_USERID = "userId";
-    public static final String COMMAND_COMMENT_POSTID = "postId";
-
     @Bean(COMMAND_GATEWAY_CHANNEL)
     public MessageChannel createCommandChannel() {
         return new DirectChannel();
@@ -25,7 +23,7 @@ public class CommandConfig {
     public IntegrationFlow createCommandFlow() {
         return IntegrationFlow
                 .from(COMMAND_GATEWAY_CHANNEL)
-                // endpoint가 2개가 생기니 router가 작동하는것을 확인!
+                // endpoint가 2개 이상부터 router가 작동하는것을 확인!
                 .route((Command c) -> c.getClass().getSimpleName())
                 .get();
     }

@@ -1,12 +1,14 @@
 package com.example.sns_project.domain.post.entity;
 
-import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.config.exception.InvalidRequest;
+import com.example.sns_project.config.messaging.event.Event;
+import com.example.sns_project.config.util.BanWords;
 import com.example.sns_project.domain.comment.entity.CommentId;
-import com.example.sns_project.domain.user.entity.User;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +22,7 @@ import java.util.Arrays;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post implements Event {
     @EmbeddedId
     @Column(name = "postId")
     private PostId postId;
