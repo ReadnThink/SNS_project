@@ -1,8 +1,8 @@
 package com.example.sns_project.domain.post.entity;
 
 import com.example.sns_project.config.exception.InvalidRequest;
-import com.example.sns_project.config.messaging.event.Event;
-import com.example.sns_project.config.util.BanWords;
+import com.example.sns_project.domain.messaging.event.Event;
+import com.example.sns_project.infra.util.BanWords;
 import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotMatch;
@@ -28,7 +28,6 @@ public class Post implements Event {
     private PostId postId;
     private String content;
     private String title;
-    private CommentId commentId;
     private UserId userId;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -36,7 +35,7 @@ public class Post implements Event {
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    public Post(PostId postId, final String content, final String title, UserId userId, CommentId commentId) {
+    public Post(PostId postId, final String content, final String title, UserId userId) {
         if (postId == null) {
             postId = new PostId();
         }
@@ -44,7 +43,6 @@ public class Post implements Event {
         this.content = content;
         this.title = title;
         this.userId = userId;
-        this.commentId = commentId;
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
     }

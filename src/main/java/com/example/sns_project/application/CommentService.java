@@ -1,10 +1,10 @@
 package com.example.sns_project.application;
 
-import com.example.sns_project.application.aop.CommandAop;
-import com.example.sns_project.config.messaging.event.Events;
+import com.example.sns_project.config.aop.CommandAop;
+import com.example.sns_project.domain.messaging.event.Events;
 import com.example.sns_project.domain.comment.CommentRepository;
-import com.example.sns_project.domain.comment.dto.CommentCreate;
-import com.example.sns_project.domain.comment.dto.CommentEdit;
+import com.example.sns_project.interfaces.comment.dto.CommentCreate;
+import com.example.sns_project.interfaces.comment.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.comment.entity.CommentId;
@@ -27,8 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.sns_project.config.messaging.MassagingVO.MESSAGE_POST_ID;
-import static com.example.sns_project.config.messaging.MassagingVO.MESSAGE_USER_ID;
+import static com.example.sns_project.domain.messaging.MassagingVO.*;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -46,7 +45,7 @@ public class CommentService {
 
     @Transactional
     @CommandAop
-    @ServiceActivator(inputChannel = "CommentCreate")
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_CREATE_CHANNEL)
     public void comment(Message<CommentCreate> message) {
         var commentCreate = message.getPayload();
         var userId = message.getHeaders().get(MESSAGE_USER_ID, UserId.class);

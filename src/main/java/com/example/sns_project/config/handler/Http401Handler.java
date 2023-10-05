@@ -1,6 +1,6 @@
 package com.example.sns_project.config.handler;
 
-import com.example.sns_project.config.util.CustomResponseUtil;
+import com.example.sns_project.infra.util.CustomResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

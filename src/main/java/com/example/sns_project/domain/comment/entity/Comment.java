@@ -1,10 +1,9 @@
 package com.example.sns_project.domain.comment.entity;
 
-import com.example.sns_project.config.messaging.event.Event;
-import com.example.sns_project.config.util.BanWords;
+import com.example.sns_project.domain.messaging.event.Event;
+import com.example.sns_project.infra.util.BanWords;
 import com.example.sns_project.config.exception.InvalidRequest;
 import com.example.sns_project.domain.post.entity.PostId;
-import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,11 +1,10 @@
 package com.example.sns_project.application;
 
-import com.example.sns_project.application.aop.CommandAop;
-import com.example.sns_project.config.messaging.event.Event;
-import com.example.sns_project.config.messaging.event.Events;
+import com.example.sns_project.config.aop.CommandAop;
+import com.example.sns_project.domain.messaging.event.Events;
 import com.example.sns_project.domain.post.PostRepository;
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostEdit;
+import com.example.sns_project.interfaces.post.dto.PostCreate;
+import com.example.sns_project.interfaces.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.entity.PostId;
@@ -25,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import static com.example.sns_project.domain.messaging.MassagingVO.COMMAND_GATEWAY_POST_CREATE_CHANNEL;
+import static com.example.sns_project.domain.messaging.MassagingVO.MESSAGE_USER_ID;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -42,11 +43,11 @@ public class PostService {
 
     @Transactional
     @CommandAop
-    @ServiceActivator(inputChannel = "PostCreate")
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_POST_CREATE_CHANNEL)
     public void postCreate(Message<PostCreate> message) {
             final PostCreate postCreate = message.getPayload();
-            final UserId userId = message.getHeaders().get("userId", UserId.class);
-            log.info(postCreate.getClass().getSimpleName());
+            final UserId userId = message.getHeaders().get(MESSAGE_USER_ID, UserId.class);
+
             var user = userRepository.findById(userId)
                     .orElseThrow(UserNotFound::new);
             final Post postNotValid = postCreate.toEntity();
