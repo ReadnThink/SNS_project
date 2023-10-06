@@ -1,13 +1,16 @@
-<mxfile host="app.diagrams.net" modified="2023-10-06T12:28:59.420Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="4_bBEEnjQaq7Wr_ijT6l" version="22.0.3" type="github">
+<mxfile host="app.diagrams.net" modified="2023-10-06T16:54:10.068Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36" etag="PvGvUjxx1PzwiJ6rH3oW" version="22.0.3" type="github">
   <diagram name="페이지-1" id="p6nU3wIyXpmdqAJnokX8">
     <mxGraphModel dx="1434" dy="828" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="xcZFCRQt6zi5iByndT3Q-4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
-          <mxGeometry x="101" y="360" width="509" height="160" as="geometry" />
+        <mxCell id="Y5tQV1WfSMZcQgU5ueOd-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="429" y="360" width="371" height="153" as="geometry" />
         </mxCell>
-        <mxCell id="xcZFCRQt6zi5iByndT3Q-2" value="" style="shape=offPageConnector;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+        <mxCell id="xcZFCRQt6zi5iByndT3Q-4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="101" y="360" width="328" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="xcZFCRQt6zi5iByndT3Q-2" value="" style="shape=offPageConnector;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="409" y="25" width="410" height="150" as="geometry" />
         </mxCell>
         <mxCell id="PEcnvfb_Y7j83tSjnZYV-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
@@ -68,7 +71,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="PEcnvfb_Y7j83tSjnZYV-22" value="도메인 Transaction이 정상적으로 완료되면Thread Local에서 이벤트 읽어&lt;br&gt;Event 채널로 이벤트 전송&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="436" y="373" width="155" height="140" as="geometry" />
+          <mxGeometry x="448" y="368" width="155" height="140" as="geometry" />
         </mxCell>
         <mxCell id="PEcnvfb_Y7j83tSjnZYV-23" value="Event 채널" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="280" y="419" width="120" height="60" as="geometry" />
@@ -76,22 +79,22 @@
         <mxCell id="PEcnvfb_Y7j83tSjnZYV-24" value="Event 처리" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="119" y="419" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="PEcnvfb_Y7j83tSjnZYV-29" value="" style="endArrow=classic;html=1;rounded=0;entryX=1.013;entryY=0.557;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1">
+        <mxCell id="PEcnvfb_Y7j83tSjnZYV-29" value="" style="endArrow=classic;html=1;rounded=0;entryX=1.013;entryY=0.557;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="438" y="448.5" as="sourcePoint" />
+            <mxPoint x="449" y="449" as="sourcePoint" />
             <mxPoint x="397.0049999999999" y="448.96000000000004" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xcZFCRQt6zi5iByndT3Q-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;AOP&lt;br&gt;TransactionSynchronizationManager&lt;br&gt;&lt;/font&gt;&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="xcZFCRQt6zi5iByndT3Q-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;AOP&lt;br&gt;TransactionSynchronizationManager&lt;br&gt;&lt;/font&gt;&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="574" y="39" width="82" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="xcZFCRQt6zi5iByndT3Q-5" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Thread 1&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="283" y="369" width="170" height="30" as="geometry" />
+        <mxCell id="xcZFCRQt6zi5iByndT3Q-5" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Thread 3&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="196" y="369" width="170" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="xcZFCRQt6zi5iByndT3Q-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.4;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+        <mxCell id="xcZFCRQt6zi5iByndT3Q-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.4;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="650" y="449" as="sourcePoint" />
-            <mxPoint x="591" y="449" as="targetPoint" />
+            <mxPoint x="604" y="449" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
