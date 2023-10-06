@@ -1,13 +1,14 @@
-package com.example.sns_project.interfaces.comment.dto;
+package com.example.sns_project.interfaces.comment;
 
 import com.example.sns_project.application.CommentService;
+import com.example.sns_project.interfaces.comment.dto.CommentCreate;
+import com.example.sns_project.interfaces.comment.dto.CommentEdit;
 import com.example.sns_project.interfaces.gateway.CommendGateway;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.infra.auth.LoginUser;
 import com.example.sns_project.infra.util.ResponseDto;
 import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.post.entity.PostId;
-import com.example.sns_project.interfaces.comment.CommentEdit;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +36,8 @@ public class CommentController {
     public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        executor.execute(()->
-                commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId));
+        commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId);
+
         return ResponseEntity.ok(ResponseDto.success());
     }
 

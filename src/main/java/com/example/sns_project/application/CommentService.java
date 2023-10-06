@@ -4,7 +4,7 @@ import com.example.sns_project.config.aop.CommandAop;
 import com.example.sns_project.domain.messaging.event.Events;
 import com.example.sns_project.domain.comment.CommentRepository;
 import com.example.sns_project.interfaces.comment.dto.CommentCreate;
-import com.example.sns_project.interfaces.comment.CommentEdit;
+import com.example.sns_project.interfaces.comment.dto.CommentEdit;
 import com.example.sns_project.domain.comment.dto.CommentResponse;
 import com.example.sns_project.domain.comment.entity.Comment;
 import com.example.sns_project.domain.comment.entity.CommentId;

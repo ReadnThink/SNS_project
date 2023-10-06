@@ -37,8 +37,8 @@ public class PostController {
     public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        executor.execute(() ->
-                commendGateway.request(postCreate, loginUser.getUser().getUserId()));
+        commendGateway.request(postCreate, loginUser.getUser().getUserId());
+
         return ResponseEntity.ok(ResponseDto.success());
     }
 

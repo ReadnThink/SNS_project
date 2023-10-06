@@ -69,7 +69,7 @@ class PostControllerTest {
                 .build();
 
         var postResponse = PostResponse.builder()
-                .id(postId)
+                .postId(postId)
                 .title("제목")
                 .content("내용")
                 .build();
