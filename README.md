@@ -2,11 +2,12 @@
 
 # Spring Integration
 [트랜잭션 정상 Commit 이후 Event 등록하기](https://sol-b.tistory.com/95) <br/>
-DirectChannel에서 ExecutorChannel로 변경한 이유 <br/>
+[DirectChannel에서 ExecutorChannel로 변경한 이유](https://sol-b.tistory.com/96) <br/>
 LocalThread란? <br/>
 Spring Integration이란? 사용한 이유 <br/>
 
-![image](https://github.com/ReadnThink/SNS_project/assets/103480627/0325fde7-4680-4d70-bf1e-b23e136e0fca)
+![image](https://github.com/ReadnThink/SNS_project/assets/103480627/f39fbb6d-c6d0-45c3-b55e-9cb7a07c32b9)
+
 
 
 
