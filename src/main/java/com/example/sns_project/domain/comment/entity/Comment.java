@@ -1,9 +1,9 @@
 package com.example.sns_project.domain.comment.entity;
 
-import com.example.sns_project.config.util.BanWords;
+import com.example.sns_project.domain.messaging.event.Event;
+import com.example.sns_project.infra.util.BanWords;
 import com.example.sns_project.config.exception.InvalidRequest;
 import com.example.sns_project.domain.post.entity.PostId;
-import com.example.sns_project.domain.user.entity.UserId;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment implements Event {
     @EmbeddedId
     @Column(name = "commentId")
     private CommentId commentId;

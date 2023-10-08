@@ -1,8 +1,8 @@
 package com.example.sns_project.application;
 
+import com.example.sns_project.config.aop.CommandAop;
+import com.example.sns_project.domain.messaging.event.Events;
 import com.example.sns_project.domain.post.PostRepository;
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.Post;
 import com.example.sns_project.domain.post.entity.PostId;
@@ -10,8 +10,9 @@ import com.example.sns_project.domain.post.exception.PostNotFound;
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.entity.UserId;
 import com.example.sns_project.domain.user.exception.UserNotFound;
+import com.example.sns_project.interfaces.post.dto.PostCreate;
+import com.example.sns_project.interfaces.post.dto.PostEdit;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -20,9 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
-import static com.example.sns_project.config.messaging.command.CommandConfig.*;
+import static com.example.sns_project.domain.messaging.MassagingVO.COMMAND_GATEWAY_POST_CREATE_CHANNEL;
+import static com.example.sns_project.domain.messaging.MassagingVO.MESSAGE_USER_ID;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -30,21 +31,19 @@ import static java.util.stream.Collectors.toList;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final Executor executor;
 
-    public PostService(final PostRepository postRepository, final UserRepository userRepository, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
+    public PostService(final PostRepository postRepository, final UserRepository userRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
-        this.executor = executor;
     }
 
     @Transactional
-    @ServiceActivator(inputChannel = "PostCreate")
+    @CommandAop
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_POST_CREATE_CHANNEL)
     public void postCreate(Message<PostCreate> message) {
-        executor.execute(() -> {
             final PostCreate postCreate = message.getPayload();
-            final UserId userId = message.getHeaders().get("userId", UserId.class);
-            log.info(postCreate.getClass().getSimpleName());
+            final UserId userId = message.getHeaders().get(MESSAGE_USER_ID, UserId.class);
+
             var user = userRepository.findById(userId)
                     .orElseThrow(UserNotFound::new);
             final Post postNotValid = postCreate.toEntity();
@@ -54,7 +53,8 @@ public class PostService {
 
             post.addUser(user.getUserId());
             user.addPost(post.getPostId());
-        });
+
+            Events.register(post);
     }
 
 
@@ -82,6 +82,7 @@ public class PostService {
                 .collect(toList());
     }
 
+    @CommandAop
     @Transactional
     public void edit(PostId id, PostEdit postEdit, UserId userId) {
         var post = postRepository.findById(id)
@@ -96,6 +97,7 @@ public class PostService {
         );
     }
 
+    @CommandAop
     @Transactional
     public void delete(final PostId postId, UserId userId) {
         var post = postRepository.findById(postId)

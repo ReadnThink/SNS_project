@@ -1,8 +1,8 @@
 package com.example.sns_project.controller;
 
 import com.example.sns_project.application.PostService;
-import com.example.sns_project.domain.post.dto.PostCreate;
-import com.example.sns_project.domain.post.dto.PostEdit;
+import com.example.sns_project.interfaces.post.dto.PostCreate;
+import com.example.sns_project.interfaces.post.dto.PostEdit;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.domain.post.entity.PostId;
 import com.example.sns_project.domain.post.exception.PostNotFound;
@@ -69,7 +69,7 @@ class PostControllerTest {
                 .build();
 
         var postResponse = PostResponse.builder()
-                .id(postId)
+                .postId(postId)
                 .title("제목")
                 .content("내용")
                 .build();

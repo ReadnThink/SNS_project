@@ -54,6 +54,4 @@ public class UserRepositoryImpl implements UserRepository {
                 .getResultList()
                 .size();
     }
-
-
 }
