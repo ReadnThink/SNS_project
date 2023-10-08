@@ -15,7 +15,6 @@ import static com.example.sns_project.domain.messaging.MassagingVO.*;
 @Configuration
 @EnableIntegration
 public class CommandConfig {
-
     private final ThreadPool threadPool;
 
     public CommandConfig(final ThreadPool threadPool) {

@@ -25,12 +25,10 @@ import java.util.concurrent.Executor;
 public class PostController {
     private final PostService postService;
     private final CommendGateway commendGateway;
-    private final Executor executor;
 
-    public PostController(final PostService postService, final CommendGateway commendGateway, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
+    public PostController(final PostService postService, final CommendGateway commendGateway) {
         this.postService = postService;
         this.commendGateway = commendGateway;
-        this.executor = executor;
     }
 
     @PostMapping("/auth/posts")

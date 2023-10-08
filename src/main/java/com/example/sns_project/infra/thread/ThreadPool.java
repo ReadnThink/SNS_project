@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
  */
 @Configuration
 public class ThreadPool {
+
     @Bean
     public Executor getDomainEventTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

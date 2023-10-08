@@ -24,12 +24,10 @@ import java.util.concurrent.Executor;
 public class CommentController {
     private final CommentService commentService;
     private final CommendGateway commendGateway;
-    private final Executor executor;
 
-    public CommentController(final CommentService commentService, final CommendGateway commendGateway, @Qualifier("getDomainEventTaskExecutor") final Executor executor) {
+    public CommentController(final CommentService commentService, final CommendGateway commendGateway) {
         this.commentService = commentService;
         this.commendGateway = commendGateway;
-        this.executor = executor;
     }
 
     @PostMapping("/auth/posts/{postId}/comments")

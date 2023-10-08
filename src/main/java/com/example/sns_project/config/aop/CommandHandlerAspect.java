@@ -20,23 +20,18 @@ public class CommandHandlerAspect {
 
     @Before("@annotation(com.example.sns_project.config.aop.CommandAop)")
     public void before(JoinPoint joinPoint) {
-        final Optional<TransactionSynchronization> eventTransaction = TransactionSynchronizationManager.getSynchronizations().stream()
-                .filter(transactionSynchronization -> transactionSynchronization instanceof EventsTransactionSynchronization)
-                .findAny();
         log.info("---------------AOP CommandHandlerAspect with TransactionSynchronizationManager start!---------------");
-        if (eventTransaction.isEmpty()) {
-            TransactionSynchronizationManager.registerSynchronization(new EventsTransactionSynchronization());
-        }
+        TransactionSynchronizationManager.registerSynchronization(new EventsTransactionSynchronization());
     }
 
-    public class EventsTransactionSynchronization implements TransactionSynchronization{
+    public class EventsTransactionSynchronization implements TransactionSynchronization {
 
         @Override
         public void afterCommit() {
-            log.info("Transaction Success!!");
+            log.info("---------------Transaction Success!!---------------");
             // todo Event 채널 만들어서 Event 채널로 보내기
             Events.getEvents().stream()
-                    .map(e -> (Post)e)
+                    .map(e -> (Post) e)
                     .forEach(post -> {
                         System.out.println(post.getContent());
                     });
