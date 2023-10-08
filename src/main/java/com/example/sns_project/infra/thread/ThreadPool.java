@@ -15,14 +15,20 @@ import java.util.concurrent.Executor;
  */
 @Configuration
 public class ThreadPool {
+    private static final int CORE_POOL_SIZE = 3;
+    private static final int QUEUE_CAPACITY = 3;
+    private static final int MAX_POOL_SIZE = 100;
+    private static final int KEEP_ALIVE_SECONDS = 1;
+    private static final String NAME_PREFIX = "customAsyncTask-";
 
     @Bean
     public Executor getDomainEventTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(20);
-        executor.setQueueCapacity(20);
-        executor.setMaxPoolSize(100);
-        executor.setKeepAliveSeconds(1);
+        executor.setCorePoolSize(CORE_POOL_SIZE);
+        executor.setQueueCapacity(QUEUE_CAPACITY);
+        executor.setMaxPoolSize(MAX_POOL_SIZE);
+        executor.setKeepAliveSeconds(KEEP_ALIVE_SECONDS);
+        executor.setThreadNamePrefix(NAME_PREFIX);
         return executor;
     }
 }
