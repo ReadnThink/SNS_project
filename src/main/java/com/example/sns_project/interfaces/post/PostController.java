@@ -1,7 +1,7 @@
 package com.example.sns_project.interfaces.post;
 
 import com.example.sns_project.interfaces.gateway.CommendGateway;
-import com.example.sns_project.application.PostService;
+import com.example.sns_project.application.commands.PostService;
 import com.example.sns_project.domain.post.dto.PostResponse;
 import com.example.sns_project.infra.auth.LoginUser;
 import com.example.sns_project.infra.util.ResponseDto;
@@ -10,7 +10,6 @@ import com.example.sns_project.interfaces.post.dto.PostCreate;
 import com.example.sns_project.interfaces.post.dto.PostEdit;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 @Slf4j
 @RestController
@@ -35,6 +33,7 @@ public class PostController {
     public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
+        log.info("Controller! - for Thread check");
         commendGateway.request(postCreate, loginUser.getUser().getUserId());
 
         return ResponseEntity.ok(ResponseDto.success());

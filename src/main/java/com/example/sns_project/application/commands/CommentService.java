@@ -1,4 +1,4 @@
-package com.example.sns_project.application;
+package com.example.sns_project.application.commands;
 
 import com.example.sns_project.config.aop.CommandAop;
 import com.example.sns_project.domain.messaging.event.Events;
@@ -56,13 +56,19 @@ public class CommentService {
         var post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
 
-        final Comment comment = Comment.builder()
+        var saveComment = commentRepository.save(
+                Comment.builder()
                 .author(user.getEmail())
                 .content(commentCreate.content())
                 .postId(post.getPostId())
-                .build();
-        final Comment saveComment = commentRepository.save(comment);
-        Events.register(saveComment);
+                .build());
+
+        Events.register(CommentResponse.builder()
+                .commentId(saveComment.getCommentId())
+                .comment(saveComment.getContent())
+                .author(saveComment.getAuthor())
+                .lastModifiedAt(saveComment.getLastModifiedAt())
+                .build());
     }
 
     @Transactional

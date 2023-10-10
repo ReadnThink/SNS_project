@@ -1,4 +1,4 @@
-package com.example.sns_project.application;
+package com.example.sns_project.application.commands;
 
 import com.example.sns_project.domain.user.UserRepository;
 import com.example.sns_project.domain.user.dto.SignUp;

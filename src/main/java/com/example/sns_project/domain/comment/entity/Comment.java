@@ -19,7 +19,7 @@ import java.util.Arrays;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment implements Event {
+public class Comment {
     @EmbeddedId
     @Column(name = "commentId")
     private CommentId commentId;

@@ -19,7 +19,7 @@ public class ThreadPool {
     private static final int QUEUE_CAPACITY = 3;
     private static final int MAX_POOL_SIZE = 100;
     private static final int KEEP_ALIVE_SECONDS = 1;
-    private static final String NAME_PREFIX = "customAsyncTask-";
+    private static final String NAME_PREFIX = "myAsyncTask-";
 
     @Bean
     public Executor getDomainEventTaskExecutor() {

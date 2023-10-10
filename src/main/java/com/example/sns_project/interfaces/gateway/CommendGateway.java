@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import static com.example.sns_project.domain.messaging.MassagingVO.*;
 
 /**
+ * todo
  * return type에 대항 응답 차이
  *
  * void면 api응답을 바로한다.

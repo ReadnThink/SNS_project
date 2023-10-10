@@ -1,6 +1,6 @@
 package com.example.sns_project.service;
 
-import com.example.sns_project.application.PostService;
+import com.example.sns_project.application.commands.PostService;
 import com.example.sns_project.domain.post.PostRepository;
 import com.example.sns_project.interfaces.post.dto.PostCreate;
 import com.example.sns_project.domain.post.dto.PostResponse;

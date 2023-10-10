@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post implements Event {
+public class Post {
     @EmbeddedId
     @Column(name = "postId")
     private PostId postId;
