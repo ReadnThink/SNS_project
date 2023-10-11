@@ -1,6 +1,6 @@
 package com.example.sns_project.interfaces.auth;
 
-import com.example.sns_project.application.AuthService;
+import com.example.sns_project.application.commands.AuthService;
 import com.example.sns_project.domain.user.dto.SignUp;
 import com.example.sns_project.infra.util.ResponseDto;
 import jakarta.validation.Valid;

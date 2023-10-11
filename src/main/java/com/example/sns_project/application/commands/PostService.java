@@ -1,4 +1,4 @@
-package com.example.sns_project.application;
+package com.example.sns_project.application.commands;
 
 import com.example.sns_project.config.aop.CommandAop;
 import com.example.sns_project.domain.messaging.event.Events;
@@ -54,7 +54,12 @@ public class PostService {
             post.addUser(user.getUserId());
             user.addPost(post.getPostId());
 
-            Events.register(post);
+            Events.register(
+                    PostResponse.builder()
+                            .postId(post.getPostId())
+                            .content(post.getContent())
+                            .title(post.getTitle())
+                            .build());
     }
 
 

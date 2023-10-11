@@ -1,6 +1,6 @@
 package com.example.sns_project.interfaces.comment;
 
-import com.example.sns_project.application.CommentService;
+import com.example.sns_project.application.commands.CommentService;
 import com.example.sns_project.interfaces.comment.dto.CommentCreate;
 import com.example.sns_project.interfaces.comment.dto.CommentEdit;
 import com.example.sns_project.interfaces.gateway.CommendGateway;
@@ -10,7 +10,6 @@ import com.example.sns_project.infra.util.ResponseDto;
 import com.example.sns_project.domain.comment.entity.CommentId;
 import com.example.sns_project.domain.post.entity.PostId;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 @RestController
 public class CommentController {
