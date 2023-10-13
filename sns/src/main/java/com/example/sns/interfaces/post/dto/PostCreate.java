@@ -1,0 +1,31 @@
+package com.example.sns.interfaces.post.dto;
+
+import com.example.sns.domain.messaging.command.Command;
+import com.example.sns.domain.post.entity.Post;
+import com.example.sns.domain.post.entity.PostId;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+
+public record PostCreate (
+        @NotEmpty(message = "타이틀을 입력해주세요")
+        @Size(max = 30, message = "내용은 30글자 이내로 입력 가능합니다.")
+        String title,
+        @NotEmpty(message = "내용을 입력해주세요")
+        String content
+
+) implements Command {
+    @Builder
+    public PostCreate(final String title, final String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public Post toEntity() {
+        return Post.builder()
+                .postId(new PostId())
+                .title(this.title)
+                .content(this.content)
+                .build();
+    }
+}

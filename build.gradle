@@ -1,87 +1,100 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.0.5'
-    id 'io.spring.dependency-management' version '1.1.2'
-    id "org.asciidoctor.jvm.convert" version "3.3.2"
+/**
+ * Gradle 이 빌드되기전 실행되는 설정
+ */
+buildscript {
+    ext {
+        springBootVersion = '3.1.4'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+/**
+ * subprojects : etting.gradle 에 include 된 프로젝트를 전부 관리
+ */
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-java {
+    group 'com.example'
+    version '1.0-SNAPSHOT'
     sourceCompatibility = '17'
-}
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    asciidoctorExt
-}
-
-repositories {
-    mavenCentral()
-}
-
-ext {
-    asciidocVersion = "3.0.0"
-    snippetsDir = file('build/generated-snippets')
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
-
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // test 환경 Lombok 사용
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-    // jwt
-    implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
-
-    // Configuring Annotation Processor
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
-    // sql
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // Spring Integration
-    implementation 'org.springframework.boot:spring-boot-starter-integration'
-
-    // aop
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-test {
-    outputs.dir snippetsDir
-}
-
-asciidoctor {
-    inputs.dir snippetsDir
-    configurations 'asciidoctorExt'
-    dependsOn test
-}
-
-bootJar {
-    dependsOn asciidoctor
-
-    copy {
-        from asciidoctor.outputDir
-        into "src/main/resources/static/docs"
+    repositories {
+        mavenCentral()
     }
 
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.security:spring-security-test'
+
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        compileOnly 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        runtimeOnly 'com.h2database:h2'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        // test 환경 Lombok 사용
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        // jwt
+        implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
+
+        // Configuring Annotation Processor
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+        // sql
+        runtimeOnly 'com.mysql:mysql-connector-j'
+
+        // Spring Integration
+        implementation 'org.springframework.boot:spring-boot-starter-integration'
+
+        // aop
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+        // kafka
+        implementation 'org.springframework.kafka:spring-kafka'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+// 하위 모듈 알려주기
+project(':sns') {
+    // bootJar은 실행가능한 jar를 만들려 하기 때문에 main()이 필요
+    bootJar { enabled = true }
+    jar { enabled = true }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
+project(':query') {
+
+    bootJar { enabled = false }
+    jar { enabled = true }
+
+    dependencies {
+    }
 }
