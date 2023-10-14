@@ -15,7 +15,7 @@ buildscript {
 }
 
 /**
- * subprojects : etting.gradle 에 include 된 프로젝트를 전부 관리
+ * subprojects : setting.gradle 에 include 된 프로젝트를 전부 관리
  */
 subprojects {
     apply plugin: 'java'
@@ -72,6 +72,9 @@ subprojects {
 
         // kafka
         implementation 'org.springframework.kafka:spring-kafka'
+
+        // json
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
     }
 
     tasks.named('test') {
@@ -79,14 +82,26 @@ subprojects {
     }
 }
 
-// 하위 모듈 알려주기
+/**
+ * 하위 모듈 알려주기
+ */
+project(':core') {
+
+    bootJar { enabled = false }
+    jar { enabled = true }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
 project(':sns') {
     // bootJar은 실행가능한 jar를 만들려 하기 때문에 main()이 필요
     bootJar { enabled = true }
     jar { enabled = true }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation project(':core')
     }
 }
 
@@ -96,5 +111,6 @@ project(':query') {
     jar { enabled = true }
 
     dependencies {
+        implementation project(':core')
     }
 }

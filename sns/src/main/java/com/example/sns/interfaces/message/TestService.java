@@ -1,5 +1,6 @@
 package com.example.sns.interfaces.message;
 
+import com.example.core.dto.KafkaMsgVO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +13,7 @@ public class TestService {
         this.testCreateProducer = testCreateProducer;
     }
 
-    public void apply(Long userId) {
+    public void apply(KafkaMsgVO userId) {
         count++;
 
         if (count > 100) {
