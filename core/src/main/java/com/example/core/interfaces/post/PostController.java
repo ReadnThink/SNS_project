@@ -5,15 +5,11 @@ import com.example.core.domain.post.dto.PostResponse;
 import com.example.core.domain.post.entity.PostId;
 import com.example.core.infra.auth.LoginUser;
 import com.example.core.infra.util.ResponseDto;
-import com.example.core.interfaces.gateway.CommendGateway;
-import com.example.core.interfaces.post.dto.PostCreate;
 import com.example.core.interfaces.post.dto.PostEdit;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,22 +18,20 @@ import java.util.List;
 @RestController
 public class PostController {
     private final PostService postService;
-    private final CommendGateway commendGateway;
 
-    public PostController(final PostService postService, final CommendGateway commendGateway) {
+    public PostController(final PostService postService) {
         this.postService = postService;
-        this.commendGateway = commendGateway;
     }
 
-    @PostMapping("/auth/posts")
-    public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
-            , @AuthenticationPrincipal LoginUser loginUser)
-    {
-        log.info("Controller! - for Thread check");
-        commendGateway.request(postCreate, loginUser.getUser().getUserId());
-
-        return ResponseEntity.ok(ResponseDto.success());
-    }
+//    @PostMapping("/auth/posts")
+//    public ResponseEntity<ResponseDto<PostResponse>> post(@RequestBody @Valid PostCreate postCreate, BindingResult bindingResult
+//            , @AuthenticationPrincipal LoginUser loginUser)
+//    {
+//        log.info("Controller! - for Thread check");
+//        commendGateway.request(postCreate, loginUser.getUser().getUserId());
+//
+//        return ResponseEntity.ok(ResponseDto.success());
+//    }
 
     @GetMapping("/posts/{postId}")
     public ResponseEntity<ResponseDto<PostResponse>> get(@ModelAttribute PostId postId) {

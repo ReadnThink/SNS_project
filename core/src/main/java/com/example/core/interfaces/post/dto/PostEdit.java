@@ -9,8 +9,8 @@ public record PostEdit(
         @Size(max = 30, message = "내용은 30글자 이내로 입력 가능합니다.")
         String title,
         @NotEmpty(message = "내용을 입력해주세요")
-        String content)
-{
+        String content
+) {
 
     @Builder
     public PostEdit(final String title, final String content) {

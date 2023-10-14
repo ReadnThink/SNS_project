@@ -1,6 +1,6 @@
 package com.example.query.config;
 
-import com.example.core.dto.KafkaMsgVO;
+import com.example.core.domain.KafkaPostCreate;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +16,11 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConsumerConfig {
-
     /**
      * ConsumerFactory 설정
      */
     @Bean
-    public ConsumerFactory<String, KafkaMsgVO> consumerFactory() {
+    public ConsumerFactory<String, KafkaPostCreate> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -32,7 +31,7 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
                 config,
                 new StringDeserializer(),
-                new JsonDeserializer<>(KafkaMsgVO.class, new ObjectMapper())
+                new JsonDeserializer<>(KafkaPostCreate.class, new ObjectMapper())
         );
     }
 
@@ -40,8 +39,8 @@ public class KafkaConsumerConfig {
      * topic으로부터 message를 전달받는 kafka-listener-factory 설정
      */
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaMsgVO> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, KafkaMsgVO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, KafkaPostCreate> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, KafkaPostCreate> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
 
         return factory;

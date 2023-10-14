@@ -1,6 +1,6 @@
 package com.example.sns.config.kafka;
 
-import com.example.core.dto.KafkaMsgVO;
+import com.example.core.domain.KafkaPostCreate;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +15,11 @@ import java.util.Map;
 
 @Configuration
 public class KafkaProducerConfig {
-
     /**
      * producerFactory 설정
      */
     @Bean
-    public ProducerFactory<String, KafkaMsgVO> producerFactory() {
+    public ProducerFactory<String, KafkaPostCreate> producerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -34,7 +33,7 @@ public class KafkaProducerConfig {
      * kafka 템플릿 설정
      */
     @Bean
-    public KafkaTemplate<String, KafkaMsgVO> kafkaTemplate() {
+    public KafkaTemplate<String, KafkaPostCreate> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

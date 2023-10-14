@@ -1,6 +1,5 @@
 package com.example.core.interfaces.post.dto;
 
-import com.example.core.domain.messaging.command.Command;
 import com.example.core.domain.post.entity.Post;
 import com.example.core.domain.post.entity.PostId;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,7 +13,7 @@ public record PostCreate (
         @NotEmpty(message = "내용을 입력해주세요")
         String content
 
-) implements Command {
+) {
     @Builder
     public PostCreate(final String title, final String content) {
         this.title = title;
