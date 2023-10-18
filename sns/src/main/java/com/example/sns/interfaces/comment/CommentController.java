@@ -2,6 +2,9 @@ package com.example.sns.interfaces.comment;
 
 import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.CommentId;
+import com.example.core.domain.messaging.command.comment.KafkaCommentCreate;
+import com.example.core.domain.messaging.command.comment.KafkaCommentDelete;
+import com.example.core.domain.messaging.command.comment.KafkaCommentEdit;
 import com.example.core.domain.post.entity.PostId;
 import com.example.core.infra.auth.LoginUser;
 import com.example.core.infra.util.ResponseDto;
@@ -27,12 +30,13 @@ public class CommentController {
         this.commentService = commentService;
         this.commendGateway = commendGateway;
     }
-
+    // todo StatusCode 상황에 맞게 설계하기
     @PostMapping("/auth/posts/{postId}/comments")
-    public ResponseEntity<ResponseDto<CommentResponse>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
+    public ResponseEntity<ResponseDto<String>> comment(@ModelAttribute final PostId postId, @RequestBody @Valid CommentCreate commentCreate, BindingResult bindingResult
             , @AuthenticationPrincipal LoginUser loginUser)
     {
-        commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId);
+//        commendGateway.request(commentCreate, loginUser.getUser().getUserId(), postId);
+        commendGateway.request(new KafkaCommentCreate(commentCreate, loginUser.getUser().getUserId(), postId));
 
         return ResponseEntity.ok(ResponseDto.success());
     }
@@ -40,6 +44,7 @@ public class CommentController {
     @GetMapping("/comments/{commentId}")
     public ResponseEntity<ResponseDto<CommentResponse>> getComment(@ModelAttribute final CommentId commentId){
         final CommentResponse comment = commentService.getComment(commentId);
+
         return ResponseEntity.ok(ResponseDto.success(comment));
     }
 
@@ -53,13 +58,17 @@ public class CommentController {
 
     @PostMapping("/auth/comments/{commentId}")
     public ResponseEntity<ResponseDto<String>> edit(@ModelAttribute CommentId commentId, @RequestBody CommentEdit commentEdit, @AuthenticationPrincipal LoginUser loginUser) {
-        final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getUserId());
-        return ResponseEntity.ok(ResponseDto.success(success));
+//        final String success = commentService.edit(commentId, commentEdit, loginUser.getUser().getUserId());
+        commendGateway.request(new KafkaCommentEdit(commentId, commentEdit, loginUser.getUser().getUserId()));
+
+        return ResponseEntity.ok(ResponseDto.success());
     }
 
     @DeleteMapping("/auth/comments/{commentId}")
     public ResponseEntity<ResponseDto<String>> delete(@ModelAttribute CommentId commentId, @AuthenticationPrincipal LoginUser loginUser) {
-        final String success = commentService.delete(commentId, loginUser.getUser().getUserId());
-        return ResponseEntity.ok(ResponseDto.success(success));
+//        final String success = commentService.delete(commentId, loginUser.getUser().getUserId());
+        commendGateway.request(new KafkaCommentDelete(commentId, loginUser.getUser().getUserId()));
+
+        return ResponseEntity.ok(ResponseDto.success());
     }
 }

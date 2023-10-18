@@ -6,6 +6,9 @@ import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.Comment;
 import com.example.core.domain.comment.entity.CommentId;
 import com.example.core.domain.comment.exception.CommentNotFound;
+import com.example.core.domain.messaging.command.comment.KafkaCommentCreate;
+import com.example.core.domain.messaging.command.comment.KafkaCommentDelete;
+import com.example.core.domain.messaging.command.comment.KafkaCommentEdit;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.entity.PostId;
@@ -46,10 +49,10 @@ public class CommentService {
     @Transactional
     @CommandAop
     @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_CREATE_CHANNEL)
-    public void comment(Message<CommentCreate> message) {
-        var commentCreate = message.getPayload();
-        var userId = message.getHeaders().get(MESSAGE_USER_ID, UserId.class);
-        var postId = message.getHeaders().get(MESSAGE_POST_ID, PostId.class);
+    public void comment(KafkaCommentCreate kafkaCommentCreate) {
+        var commentCreate = kafkaCommentCreate.commentCreate();
+        var userId = kafkaCommentCreate.userId();
+        var postId = kafkaCommentCreate.postId();
 
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
@@ -95,9 +98,14 @@ public class CommentService {
                 .collect(toList());
     }
 
-
+    @CommandAop
     @Transactional
-    public String edit(final CommentId commentId, final CommentEdit commentEdit, final UserId userId) {
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_EDIT_CHANNEL)
+    public void edit(KafkaCommentEdit kafkaCommentEdit) {
+        var commentEdit = kafkaCommentEdit.commentEdit();
+        var commentId = kafkaCommentEdit.commentId();
+        var userId = kafkaCommentEdit.userId();
+
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
         var user = userRepository.findById(userId)
@@ -108,11 +116,16 @@ public class CommentService {
         }
 
         comment.editComment(commentEdit.comment());
-        return "댓글 수정을 성공하였습니다.";
     }
 
+
+    @CommandAop
     @Transactional
-    public String delete(final CommentId commentId, final UserId userId) {
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_DELETE_CHANNEL)
+    public void delete(KafkaCommentDelete kafkaCommentDelete) {
+        var commentId = kafkaCommentDelete.commentId();
+        var userId = kafkaCommentDelete.userId();
+
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
         var user = userRepository.findById(userId)
@@ -123,6 +136,5 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
-        return "댓글 삭제를 성공하였습니다.";
     }
 }
