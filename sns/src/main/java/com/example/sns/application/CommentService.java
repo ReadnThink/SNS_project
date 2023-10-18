@@ -1,4 +1,4 @@
-package com.example.core.application.commands;
+package com.example.sns.application;
 
 import com.example.core.config.aop.CommandAop;
 import com.example.core.domain.comment.CommentRepository;
@@ -14,9 +14,9 @@ import com.example.core.domain.user.UserRepository;
 import com.example.core.domain.user.entity.UserId;
 import com.example.core.domain.user.exception.UserNotFound;
 import com.example.core.domain.user.exception.UserNotMatch;
-import com.example.core.infra.jpa.CommentRepositoryImpl;
-import com.example.core.interfaces.comment.dto.CommentCreate;
-import com.example.core.interfaces.comment.dto.CommentEdit;
+import com.example.core.domain.comment.dto.CommentCreate;
+import com.example.core.domain.comment.dto.CommentEdit;
+import com.example.sns.infra.jpa.CommentRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

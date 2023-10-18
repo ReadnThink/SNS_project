@@ -1,6 +1,9 @@
-package com.example.core.application.commands;
+package com.example.sns.application;
 
 import com.example.core.config.aop.CommandAop;
+import com.example.core.domain.messaging.command.post.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.KafkaPostDelete;
+import com.example.core.domain.messaging.command.post.KafkaPostEdit;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.dto.PostResponse;
@@ -10,20 +13,17 @@ import com.example.core.domain.post.exception.PostNotFound;
 import com.example.core.domain.user.UserRepository;
 import com.example.core.domain.user.entity.UserId;
 import com.example.core.domain.user.exception.UserNotFound;
-import com.example.core.interfaces.post.dto.PostCreate;
-import com.example.core.interfaces.post.dto.PostEdit;
+import com.example.core.domain.post.dto.PostCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.core.domain.messaging.MassagingVO.COMMAND_GATEWAY_POST_CREATE_CHANNEL;
-import static com.example.core.domain.messaging.MassagingVO.MESSAGE_USER_ID;
+import static com.example.core.domain.messaging.MassagingVO.*;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -40,28 +40,27 @@ public class PostService {
     @Transactional
     @CommandAop
     @ServiceActivator(inputChannel = COMMAND_GATEWAY_POST_CREATE_CHANNEL)
-    public void postCreate(Message<PostCreate> message) {
-            final PostCreate postCreate = message.getPayload();
-            final UserId userId = message.getHeaders().get(MESSAGE_USER_ID, UserId.class);
+    public void postCreate(KafkaPostCreate kafkaPostCreate) {
+        final PostCreate postCreate = kafkaPostCreate.postCreate();
+        final UserId userId = kafkaPostCreate.userId();
 
-            var user = userRepository.findById(userId)
-                    .orElseThrow(UserNotFound::new);
-            final Post postNotValid = postCreate.toEntity();
-            postNotValid.isValid();
+        var user = userRepository.findById(userId)
+                .orElseThrow(UserNotFound::new);
+        final Post postNotValid = postCreate.toEntity();
+        postNotValid.isValid();
 
-            var post = postRepository.save(postNotValid);
+        var post = postRepository.save(postNotValid);
 
-            post.addUser(user.getUserId());
-            user.addPost(post.getPostId());
+        post.addUser(user.getUserId());
+        user.addPost(post.getPostId());
 
-            Events.register(
-                    PostResponse.builder()
-                            .postId(post.getPostId())
-                            .content(post.getContent())
-                            .title(post.getTitle())
-                            .build());
+        Events.register(
+                PostResponse.builder()
+                        .postId(post.getPostId())
+                        .content(post.getContent())
+                        .title(post.getTitle())
+                        .build());
     }
-
 
 
     @Transactional
@@ -89,8 +88,12 @@ public class PostService {
 
     @CommandAop
     @Transactional
-    public void edit(PostId id, PostEdit postEdit, UserId userId) {
-        var post = postRepository.findById(id)
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_POST_EDIT_CHANNEL)
+    public void edit(KafkaPostEdit kafkaPostEdit) {
+        var postEdit = kafkaPostEdit.postEdit();
+        var postId = kafkaPostEdit.postId();
+        var userId = kafkaPostEdit.userId();
+        var post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
 
         validateUserExists(userId);
@@ -104,7 +107,11 @@ public class PostService {
 
     @CommandAop
     @Transactional
-    public void delete(final PostId postId, UserId userId) {
+    @ServiceActivator(inputChannel = COMMAND_GATEWAY_POST_DELETE_CHANNEL)
+    public void delete(KafkaPostDelete kafkaPostDelete) {
+        var postId = kafkaPostDelete.postId();
+        var userId = kafkaPostDelete.userId();
+
         var post = postRepository.findById(postId)
                 .orElseThrow(PostNotFound::new);
 

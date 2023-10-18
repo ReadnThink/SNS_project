@@ -1,6 +1,6 @@
 package com.example.sns.config.kafka;
 
-import com.example.core.domain.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.KafkaPostCreate;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;

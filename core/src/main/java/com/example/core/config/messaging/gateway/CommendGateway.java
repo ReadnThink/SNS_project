@@ -1,4 +1,4 @@
-package com.example.core.interfaces.gateway;
+package com.example.core.config.messaging.gateway;
 
 import com.example.core.domain.messaging.command.Command;
 import com.example.core.domain.post.entity.PostId;
@@ -17,6 +17,7 @@ import static com.example.core.domain.messaging.MassagingVO.*;
  */
 @MessagingGateway(defaultRequestChannel = COMMAND_GATEWAY_CHANNEL)
 public interface CommendGateway {
-    void request(Command command, @Header(value = MESSAGE_USER_ID) UserId userId);
+    void request(Command command);
+//    void request(Command command, @Header(value = MESSAGE_USER_ID) UserId userId);
     void request(Command command, @Header(value = MESSAGE_USER_ID) UserId userId, @Header(value = MESSAGE_POST_ID) PostId postId);
 }

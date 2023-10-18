@@ -1,4 +1,4 @@
-package com.example.core.interfaces.auth.dto;
+package com.example.core.infra.jwt.dto;
 
 import com.example.core.domain.user.entity.UserId;
 import lombok.Builder;

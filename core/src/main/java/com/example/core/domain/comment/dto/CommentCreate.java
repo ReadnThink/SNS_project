@@ -1,4 +1,4 @@
-package com.example.core.interfaces.comment.dto;
+package com.example.core.domain.comment.dto;
 
 import com.example.core.domain.messaging.command.Command;
 import jakarta.validation.constraints.NotEmpty;

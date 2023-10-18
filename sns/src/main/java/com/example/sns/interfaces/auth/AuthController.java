@@ -1,8 +1,8 @@
-package com.example.core.interfaces.auth;
+package com.example.sns.interfaces.auth;
 
-import com.example.core.application.commands.AuthService;
 import com.example.core.domain.user.dto.SignUp;
 import com.example.core.infra.util.ResponseDto;
+import com.example.sns.application.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

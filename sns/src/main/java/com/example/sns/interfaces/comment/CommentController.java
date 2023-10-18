@@ -1,14 +1,14 @@
-package com.example.core.interfaces.comment;
+package com.example.sns.interfaces.comment;
 
-import com.example.core.application.commands.CommentService;
 import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.CommentId;
 import com.example.core.domain.post.entity.PostId;
 import com.example.core.infra.auth.LoginUser;
 import com.example.core.infra.util.ResponseDto;
-import com.example.core.interfaces.comment.dto.CommentCreate;
-import com.example.core.interfaces.comment.dto.CommentEdit;
-import com.example.core.interfaces.gateway.CommendGateway;
+import com.example.sns.application.CommentService;
+import com.example.core.domain.comment.dto.CommentCreate;
+import com.example.core.domain.comment.dto.CommentEdit;
+import com.example.core.config.messaging.gateway.CommendGateway;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

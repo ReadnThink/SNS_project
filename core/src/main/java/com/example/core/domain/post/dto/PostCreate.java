@@ -1,12 +1,13 @@
-package com.example.core.interfaces.post.dto;
+package com.example.core.domain.post.dto;
 
+import com.example.core.domain.messaging.command.Command;
 import com.example.core.domain.post.entity.Post;
 import com.example.core.domain.post.entity.PostId;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
-public record PostCreate (
+public record PostCreate(
         @NotEmpty(message = "타이틀을 입력해주세요")
         @Size(max = 30, message = "내용은 30글자 이내로 입력 가능합니다.")
         String title,

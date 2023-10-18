@@ -1,4 +1,4 @@
-package com.example.core.infra.jpa;
+package com.example.sns.infra.jpa;
 
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.entity.Post;

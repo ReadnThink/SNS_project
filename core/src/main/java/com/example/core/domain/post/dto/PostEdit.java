@@ -1,4 +1,4 @@
-package com.example.core.interfaces.post.dto;
+package com.example.core.domain.post.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

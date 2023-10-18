@@ -1,6 +1,6 @@
 package com.example.query.config;
 
-import com.example.core.domain.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.KafkaPostCreate;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

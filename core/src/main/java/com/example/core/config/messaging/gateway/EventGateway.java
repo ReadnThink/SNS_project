@@ -1,4 +1,4 @@
-package com.example.core.interfaces.gateway;
+package com.example.core.config.messaging.gateway;
 
 import com.example.core.domain.messaging.event.Event;
 import org.springframework.integration.annotation.MessagingGateway;

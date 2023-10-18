@@ -1,4 +1,4 @@
-package com.example.core.interfaces.auth.dto;
+package com.example.core.infra.jwt.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.sns.interfaces.message;
 
-import com.example.core.domain.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.KafkaPostCreate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

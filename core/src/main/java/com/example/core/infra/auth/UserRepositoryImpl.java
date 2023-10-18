@@ -1,4 +1,4 @@
-package com.example.core.infra.jpa;
+package com.example.core.infra.auth;
 
 import com.example.core.domain.user.UserRepository;
 import com.example.core.domain.user.entity.User;

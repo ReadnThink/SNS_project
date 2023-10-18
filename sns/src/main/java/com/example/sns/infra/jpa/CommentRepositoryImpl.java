@@ -1,4 +1,4 @@
-package com.example.core.infra.jpa;
+package com.example.sns.infra.jpa;
 
 import com.example.core.domain.comment.CommentRepository;
 import com.example.core.domain.comment.entity.Comment;

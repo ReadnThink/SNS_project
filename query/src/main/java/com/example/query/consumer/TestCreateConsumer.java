@@ -1,6 +1,6 @@
 package com.example.query.consumer;
 
-import com.example.core.domain.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.KafkaPostCreate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 

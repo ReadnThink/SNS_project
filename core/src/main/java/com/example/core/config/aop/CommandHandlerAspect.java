@@ -1,7 +1,7 @@
 package com.example.core.config.aop;
 
+import com.example.core.config.messaging.gateway.EventGateway;
 import com.example.core.domain.messaging.event.Events;
-import com.example.core.interfaces.gateway.EventGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
