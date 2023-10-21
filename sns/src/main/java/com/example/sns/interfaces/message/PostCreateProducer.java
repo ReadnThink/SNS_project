@@ -1,19 +1,20 @@
 package com.example.sns.interfaces.message;
 
-import com.example.core.domain.messaging.command.post.KafkaPostCreate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PostCreateProducer {
-    private final KafkaTemplate<String, KafkaPostCreate> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
 
-    public PostCreateProducer(final KafkaTemplate<String, KafkaPostCreate> kafkaTemplate) {
+    public PostCreateProducer(final KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void create(KafkaPostCreate userId) {
-        kafkaTemplate.send("post_create", userId);
+    public void postCreate(String postCreateMessage) throws JsonProcessingException {
+        System.out.println("send! : " + postCreateMessage);
+        kafkaTemplate.send("post_create", postCreateMessage);
     }
 }

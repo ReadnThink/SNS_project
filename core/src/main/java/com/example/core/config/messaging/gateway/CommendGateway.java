@@ -1,12 +1,9 @@
 package com.example.core.config.messaging.gateway;
 
 import com.example.core.domain.messaging.command.Command;
-import com.example.core.domain.post.entity.PostId;
-import com.example.core.domain.user.entity.UserId;
 import org.springframework.integration.annotation.MessagingGateway;
-import org.springframework.messaging.handler.annotation.Header;
 
-import static com.example.core.domain.messaging.MassagingVO.*;
+import static com.example.core.domain.messaging.MassagingVO.COMMAND_GATEWAY_CHANNEL;
 
 /**
  * todo

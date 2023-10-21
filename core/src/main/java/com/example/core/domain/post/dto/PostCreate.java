@@ -1,6 +1,5 @@
 package com.example.core.domain.post.dto;
 
-import com.example.core.domain.messaging.command.Command;
 import com.example.core.domain.post.entity.Post;
 import com.example.core.domain.post.entity.PostId;
 import jakarta.validation.constraints.NotEmpty;

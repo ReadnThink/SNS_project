@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan(basePackages = {"com.example.sns", "com.example.core"})
+@ComponentScan(basePackages = {"com.example.sns", "com.example.core","com.example.query"})
 public class SnsApplication {
 
     public static void main(String[] args) {

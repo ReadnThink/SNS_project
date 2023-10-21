@@ -1,7 +1,9 @@
-package com.example.core.config.aop;
+package com.example.sns.config.aop;
 
-import com.example.core.config.messaging.gateway.EventGateway;
 import com.example.core.domain.messaging.event.Events;
+import com.example.sns.interfaces.message.PostCreateProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,10 +16,12 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @Aspect
 @Component
 public class CommandHandlerAspect {
-    private final EventGateway eventGateway;
+    private final PostCreateProducer postCreateProducer;
+    private final ObjectMapper om;
 
-    public CommandHandlerAspect(final EventGateway eventGateway) {
-        this.eventGateway = eventGateway;
+    public CommandHandlerAspect(final PostCreateProducer postCreateProducer, final ObjectMapper om) {
+        this.postCreateProducer = postCreateProducer;
+        this.om = om;
     }
 
     @Before("@annotation(com.example.core.config.aop.CommandAop)")
@@ -31,11 +35,14 @@ public class CommandHandlerAspect {
         @Override
         public void afterCommit() {
             log.info("---------------Transaction Success!! now in afterCommit---------------");
-            // todo Event 채널 만들어서 Event 채널로 보내기
-            Events.getEvents().stream()
+            Events.getEvents()
                     .forEach(event -> {
-                        log.info("router : " + event.getClass().getSimpleName());
-                        eventGateway.request(event);
+                        log.info("send message to topic : " + event.getClass().getSimpleName());
+                        try {
+                            postCreateProducer.postCreate(om.writeValueAsString(event));
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
             Events.clear();
         }

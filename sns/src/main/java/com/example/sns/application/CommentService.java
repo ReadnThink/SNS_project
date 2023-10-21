@@ -4,34 +4,23 @@ import com.example.core.config.aop.CommandAop;
 import com.example.core.domain.comment.CommentRepository;
 import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.Comment;
-import com.example.core.domain.comment.entity.CommentId;
 import com.example.core.domain.comment.exception.CommentNotFound;
 import com.example.core.domain.messaging.command.comment.KafkaCommentCreate;
 import com.example.core.domain.messaging.command.comment.KafkaCommentDelete;
 import com.example.core.domain.messaging.command.comment.KafkaCommentEdit;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
-import com.example.core.domain.post.entity.PostId;
 import com.example.core.domain.post.exception.PostNotFound;
 import com.example.core.domain.user.UserRepository;
-import com.example.core.domain.user.entity.UserId;
 import com.example.core.domain.user.exception.UserNotFound;
 import com.example.core.domain.user.exception.UserNotMatch;
-import com.example.core.domain.comment.dto.CommentCreate;
-import com.example.core.domain.comment.dto.CommentEdit;
 import com.example.sns.infra.jpa.CommentRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static com.example.core.domain.messaging.MassagingVO.*;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -61,10 +50,10 @@ public class CommentService {
 
         var saveComment = commentRepository.save(
                 Comment.builder()
-                .author(user.getEmail())
-                .content(commentCreate.content())
-                .postId(post.getPostId())
-                .build());
+                        .author(user.getEmail())
+                        .content(commentCreate.content())
+                        .postId(post.getPostId())
+                        .build());
 
         Events.register(CommentResponse.builder()
                 .commentId(saveComment.getCommentId())
@@ -74,29 +63,29 @@ public class CommentService {
                 .build());
     }
 
-    @Transactional
-    public CommentResponse getComment(final CommentId commentId) {
-        final Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(CommentNotFound::new);
+//    @Transactional
+//    public CommentResponse getComment(final CommentId commentId) {
+//        final Comment comment = commentRepository.findById(commentId)
+//                .orElseThrow(CommentNotFound::new);
+//
+//        return CommentResponse.builder()
+//                .commentId(comment.getCommentId())
+//                .comment(comment.getContent())
+//                .author(comment.getAuthor())
+//                .build();
+//    }
 
-        return CommentResponse.builder()
-                .commentId(comment.getCommentId())
-                .comment(comment.getContent())
-                .author(comment.getAuthor())
-                .build();
-    }
-
-    @Transactional
-    public List<CommentResponse> getList(final Pageable pageable) {
-        return commentRepository.
-                findAll(PageRequest.of(
-                        pageable.getPageNumber(),
-                        pageable.getPageSize())
-                )
-                .stream()
-                .map(CommentResponse::new)
-                .collect(toList());
-    }
+//    @Transactional
+//    public List<CommentResponse> getList(final Pageable pageable) {
+//        return commentRepository.
+//                findAll(PageRequest.of(
+//                        pageable.getPageNumber(),
+//                        pageable.getPageSize())
+//                )
+//                .stream()
+//                .map(CommentResponse::new)
+//                .collect(toList());
+//    }
 
     @CommandAop
     @Transactional

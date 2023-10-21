@@ -102,15 +102,17 @@ project(':sns') {
 
     dependencies {
         implementation project(':core')
+        implementation project(':query')
     }
 }
 
 project(':query') {
 
-    bootJar { enabled = false }
+    bootJar { enabled = true }
     jar { enabled = true }
 
     dependencies {
         implementation project(':core')
     }
 }
+
