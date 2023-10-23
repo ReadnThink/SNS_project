@@ -9,10 +9,12 @@ import com.example.query.infra.jpa.PostQueryRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -47,7 +49,8 @@ public class PostQueryController {
                 postQueryRepository.
                         findAll(PageRequest.of(
                                 pageable.getPageNumber(),
-                                pageable.getPageSize())
+                                pageable.getPageSize(),
+                                pageable.getSortOr(Sort.by("createdAt").descending()))
                         ).stream()
                         .map(PostResponse::new)
                         .collect(toList())));

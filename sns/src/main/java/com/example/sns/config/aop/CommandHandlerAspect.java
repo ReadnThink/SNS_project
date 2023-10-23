@@ -1,9 +1,7 @@
 package com.example.sns.config.aop;
 
+import com.example.core.config.messaging.gateway.EventGateway;
 import com.example.core.domain.messaging.event.Events;
-import com.example.sns.interfaces.message.PostCreateProducer;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,12 +14,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @Aspect
 @Component
 public class CommandHandlerAspect {
-    private final PostCreateProducer postCreateProducer;
-    private final ObjectMapper om;
+    private final EventGateway eventGateway;
 
-    public CommandHandlerAspect(final PostCreateProducer postCreateProducer, final ObjectMapper om) {
-        this.postCreateProducer = postCreateProducer;
-        this.om = om;
+    public CommandHandlerAspect(final EventGateway eventGateway) {
+        this.eventGateway = eventGateway;
     }
 
     @Before("@annotation(com.example.core.config.aop.CommandAop)")
@@ -37,12 +33,8 @@ public class CommandHandlerAspect {
             log.info("---------------Transaction Success!! now in afterCommit---------------");
             Events.getEvents()
                     .forEach(event -> {
-                        log.info("send message to topic : " + event.getClass().getSimpleName());
-                        try {
-                            postCreateProducer.postCreate(om.writeValueAsString(event));
-                        } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
+                        log.info("send message to gateway (Router) : " + event.getClass().getSimpleName());
+                        eventGateway.request(event);
                     });
             Events.clear();
         }

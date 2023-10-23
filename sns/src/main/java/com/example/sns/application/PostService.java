@@ -5,6 +5,8 @@ import com.example.core.domain.messaging.command.post.PostCreateMessage;
 import com.example.core.domain.messaging.command.post.PostDeleteMessage;
 import com.example.core.domain.messaging.command.post.PostEditMessage;
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.kafka.KafkaPostDelete;
+import com.example.core.domain.messaging.command.post.kafka.KafkaPostEdit;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.dto.PostCreate;
@@ -52,6 +54,7 @@ public class PostService {
         Events.register(
                 new KafkaPostCreate(
                         post.getPostId(),
+                        post.getUserId(),
                         post.getTitle(),
                         post.getContent()));
     }
@@ -73,6 +76,13 @@ public class PostService {
                 postEdit.title(),
                 postEdit.content()
         );
+
+        Events.register(
+                new KafkaPostEdit(
+                        post.getPostId(),
+                        post.getUserId(),
+                        post.getTitle(),
+                        post.getContent()));
     }
 
     @CommandAop
@@ -88,6 +98,11 @@ public class PostService {
         validateUserExists(userId);
         post.isSameUser(userId);
 
+        Events.register(
+                new KafkaPostDelete(
+                        post.getPostId(),
+                        post.getTitle(),
+                        post.getContent()));
         postRepository.delete(post);
     }
 

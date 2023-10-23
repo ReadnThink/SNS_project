@@ -1,13 +1,17 @@
 package com.example.query.consumer;
 
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostCreate;
+import com.example.core.domain.messaging.command.post.kafka.KafkaPostDelete;
+import com.example.core.domain.messaging.command.post.kafka.KafkaPostEdit;
 import com.example.query.infra.jpa.PostQueryRepositoryImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Component
 public class PostConsumer {
     private final ObjectMapper om;
@@ -20,10 +24,40 @@ public class PostConsumer {
 
     @KafkaListener(topics = "post_create", groupId = "group_1")
     @Transactional
-    public void listener(String postCreate) throws JsonProcessingException {
-        System.out.println("-----------------------------------after Mapping-----------------------------------");
-        final KafkaPostCreate kafkaPostCreate = om.readValue(postCreate, KafkaPostCreate.class);
+    public void postCreate(String postCreate) throws JsonProcessingException {
+        log.info("KafkaListener post_create-----------------------------------");
+        var kafkaPostCreate = om.readValue(postCreate, KafkaPostCreate.class);
+        /**
+         * DB 작업이 안되어있기 N+1 작업 일어남
+         * 첫번째 save, 두번째 update
+         */
         postQueryRepository.save(kafkaPostCreate.toEntity());
-        System.out.println("kafkaPostCreate : "+kafkaPostCreate);
+
+        log.info("kafkaPostCreate : "+kafkaPostCreate);
+    }
+
+    @KafkaListener(topics = "post_edit", groupId = "group_1")
+    @Transactional
+    public void postEdit(String postEdit) throws JsonProcessingException {
+        log.info("KafkaListener post_edit-----------------------------------");
+        var kafkaPostEdit = om.readValue(postEdit, KafkaPostEdit.class);
+        /**
+         * DB 작업이 안되어있기 N+1 작업 일어남
+         * 첫번째 update, 두번째 update
+         */
+        postQueryRepository.save(kafkaPostEdit.toEntity());
+
+        log.info("kafkaPostEdit : "+kafkaPostEdit);
+    }
+
+    @KafkaListener(topics = "post_delete", groupId = "group_1")
+    @Transactional
+    public void postDelete(String postDelete) throws JsonProcessingException {
+        log.info("KafkaListener post_delete-----------------------------------");
+        var kafkaPostDelete = om.readValue(postDelete, KafkaPostDelete.class);
+        /**
+         * DB 작업이 안되어있기 때문에 아직 실제로 Delete하면 안됨.
+         */
+        log.info("kafkaPostDelete : "+kafkaPostDelete);
     }
 }
