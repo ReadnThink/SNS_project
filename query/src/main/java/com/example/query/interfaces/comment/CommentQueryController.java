@@ -3,7 +3,7 @@ package com.example.query.interfaces.comment;
 import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.CommentId;
 import com.example.core.infra.util.ResponseDto;
-import com.example.query.application.CommentFacade;
+import com.example.query.application.facade.CommentFacade;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

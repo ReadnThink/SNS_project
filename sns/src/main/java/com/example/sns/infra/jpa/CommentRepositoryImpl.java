@@ -5,11 +5,9 @@ import com.example.core.domain.comment.entity.Comment;
 import com.example.core.domain.comment.entity.CommentId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

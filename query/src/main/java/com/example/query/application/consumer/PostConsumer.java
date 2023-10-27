@@ -1,4 +1,4 @@
-package com.example.query.consumer;
+package com.example.query.application.consumer;
 
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostCreate;
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostDelete;

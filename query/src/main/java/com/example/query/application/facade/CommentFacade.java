@@ -1,4 +1,4 @@
-package com.example.query.application;
+package com.example.query.application.facade;
 
 import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.Comment;

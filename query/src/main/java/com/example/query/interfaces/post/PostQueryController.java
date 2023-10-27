@@ -3,7 +3,7 @@ package com.example.query.interfaces.post;
 import com.example.core.domain.post.dto.PostResponse;
 import com.example.core.domain.post.entity.PostId;
 import com.example.core.infra.util.ResponseDto;
-import com.example.query.application.PostFacade;
+import com.example.query.application.facade.PostFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

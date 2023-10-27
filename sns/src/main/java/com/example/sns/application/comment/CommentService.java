@@ -1,13 +1,13 @@
-package com.example.sns.application;
+package com.example.sns.application.comment;
 
 import com.example.core.config.aop.CommandAop;
 import com.example.core.domain.comment.CommentRepository;
-import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.Comment;
 import com.example.core.domain.comment.exception.CommentNotFound;
-import com.example.core.domain.messaging.command.comment.KafkaCommentCreate;
-import com.example.core.domain.messaging.command.comment.KafkaCommentDelete;
-import com.example.core.domain.messaging.command.comment.KafkaCommentEdit;
+import com.example.core.domain.messaging.command.comment.CommentCreateMessage;
+import com.example.core.domain.messaging.command.comment.CommentDeleteMessage;
+import com.example.core.domain.messaging.command.comment.CommentEditMessage;
+import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentCreate;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.exception.PostNotFound;
@@ -38,10 +38,10 @@ public class CommentService {
     @Transactional
     @CommandAop
     @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_CREATE_CHANNEL)
-    public void comment(KafkaCommentCreate kafkaCommentCreate) {
-        var commentCreate = kafkaCommentCreate.commentCreate();
-        var userId = kafkaCommentCreate.userId();
-        var postId = kafkaCommentCreate.postId();
+    public void comment(CommentCreateMessage commentCreateMessage) {
+        var commentCreate = commentCreateMessage.commentCreate();
+        var userId = commentCreateMessage.userId();
+        var postId = commentCreateMessage.postId();
 
         var user = userRepository.findById(userId)
                 .orElseThrow(UserNotFound::new);
@@ -55,45 +55,23 @@ public class CommentService {
                         .postId(post.getPostId())
                         .build());
 
-        Events.register(CommentResponse.builder()
-                .commentId(saveComment.getCommentId())
-                .comment(saveComment.getContent())
-                .author(saveComment.getAuthor())
-                .lastModifiedAt(saveComment.getLastModifiedAt())
-                .build());
+        Events.register(
+                new KafkaCommentCreate(
+                        saveComment.getCommentId(),
+                        saveComment.getPostId(),
+                        saveComment.getAuthor(),
+                        saveComment.getContent()
+                )
+        );
     }
-
-//    @Transactional
-//    public CommentResponse getComment(final CommentId commentId) {
-//        final Comment comment = commentRepository.findById(commentId)
-//                .orElseThrow(CommentNotFound::new);
-//
-//        return CommentResponse.builder()
-//                .commentId(comment.getCommentId())
-//                .comment(comment.getContent())
-//                .author(comment.getAuthor())
-//                .build();
-//    }
-
-//    @Transactional
-//    public List<CommentResponse> getList(final Pageable pageable) {
-//        return commentRepository.
-//                findAll(PageRequest.of(
-//                        pageable.getPageNumber(),
-//                        pageable.getPageSize())
-//                )
-//                .stream()
-//                .map(CommentResponse::new)
-//                .collect(toList());
-//    }
 
     @CommandAop
     @Transactional
     @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_EDIT_CHANNEL)
-    public void edit(KafkaCommentEdit kafkaCommentEdit) {
-        var commentEdit = kafkaCommentEdit.commentEdit();
-        var commentId = kafkaCommentEdit.commentId();
-        var userId = kafkaCommentEdit.userId();
+    public void edit(CommentEditMessage commentEditMessage) {
+        var commentEdit = commentEditMessage.commentEdit();
+        var commentId = commentEditMessage.commentId();
+        var userId = commentEditMessage.userId();
 
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
@@ -111,9 +89,9 @@ public class CommentService {
     @CommandAop
     @Transactional
     @ServiceActivator(inputChannel = COMMAND_GATEWAY_COMMENT_DELETE_CHANNEL)
-    public void delete(KafkaCommentDelete kafkaCommentDelete) {
-        var commentId = kafkaCommentDelete.commentId();
-        var userId = kafkaCommentDelete.userId();
+    public void delete(CommentDeleteMessage commentDeleteMessage) {
+        var commentId = commentDeleteMessage.commentId();
+        var userId = commentDeleteMessage.userId();
 
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFound::new);
