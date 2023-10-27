@@ -1,6 +1,8 @@
 package com.example.sns.application.comment;
 
 import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentCreate;
+import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentDelete;
+import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentEdit;
 import com.example.sns.interfaces.message.CommentCreateProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Service;
 
-import static com.example.core.domain.messaging.MassagingVO.EVENT_GATEWAY_COMMENT_CREATE_CHANNEL;
+import static com.example.core.domain.messaging.MassagingVO.*;
+import static com.example.core.domain.messaging.MassagingVO.EVENT_GATEWAY_COMMENT_EDIT_CHANNEL;
 
 @Slf4j
 @Service
@@ -28,15 +31,15 @@ public class KafkaCommentSendRouter {
         commentCreateProducer.commentCreate(om.registerModule(new JavaTimeModule()).writeValueAsString(commentCreate));
     }
 
-//    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_EDIT_CHANNEL)
-//    public void send(KafkaCommentEdit kafkaCommentEdit) throws JsonProcessingException {
-//        log.info("Router : kafkaCommentEdit");
-//        commentCreateProducer.commentEdit(om.writeValueAsString(kafkaCommentEdit));
-//    }
-//
-//    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_Delete_CHANNEL)
-//    public void send(KafkaCommentDelete kafkaCommentDelete) throws JsonProcessingException {
-//        log.info("Router : kafkaCommentDelete");
-//        commentCreateProducer.commentDelete(om.writeValueAsString(kafkaCommentDelete));
-//    }
+    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_EDIT_CHANNEL)
+    public void send(KafkaCommentEdit kafkaCommentEdit) throws JsonProcessingException {
+        log.info("Router : kafkaCommentEdit");
+        commentCreateProducer.commentEdit(om.registerModule(new JavaTimeModule()).writeValueAsString(kafkaCommentEdit));
+    }
+
+    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_Delete_CHANNEL)
+    public void send(KafkaCommentDelete kafkaCommentDelete) throws JsonProcessingException {
+        log.info("Router : kafkaCommentDelete");
+        commentCreateProducer.commentDelete(om.registerModule(new JavaTimeModule()).writeValueAsString(kafkaCommentDelete));
+    }
 }

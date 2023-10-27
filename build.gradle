@@ -72,6 +72,7 @@ subprojects {
 
         // json
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+        // CommentResponse lastModifiedAt을 없애면 localdateTime을 직/역직렬화하지 않기 때문에 안써도 됨
         implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     }

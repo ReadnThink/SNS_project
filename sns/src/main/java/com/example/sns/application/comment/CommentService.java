@@ -8,6 +8,7 @@ import com.example.core.domain.messaging.command.comment.CommentCreateMessage;
 import com.example.core.domain.messaging.command.comment.CommentDeleteMessage;
 import com.example.core.domain.messaging.command.comment.CommentEditMessage;
 import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentCreate;
+import com.example.core.domain.messaging.command.comment.kafka.KafkaCommentEdit;
 import com.example.core.domain.messaging.event.Events;
 import com.example.core.domain.post.PostRepository;
 import com.example.core.domain.post.exception.PostNotFound;
@@ -83,6 +84,14 @@ public class CommentService {
         }
 
         comment.editComment(commentEdit.comment());
+        Events.register(
+                new KafkaCommentEdit(
+                        comment.getCommentId(),
+                        comment.getPostId(),
+                        comment.getAuthor(),
+                        comment.getContent()
+                )
+        );
     }
 
 
@@ -103,5 +112,13 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+        Events.register(
+                new KafkaCommentEdit(
+                        comment.getCommentId(),
+                        comment.getPostId(),
+                        comment.getAuthor(),
+                        comment.getContent()
+                )
+        );
     }
 }
