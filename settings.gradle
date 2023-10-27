@@ -1,1 +1,5 @@
 rootProject.name = 'SNS_project'
+include 'sns'
+include 'query'
+include 'core'
+
