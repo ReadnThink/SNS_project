@@ -61,9 +61,6 @@ subprojects {
         // Configuring Annotation Processor
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-        // sql
-        runtimeOnly 'com.mysql:mysql-connector-j'
-
         // Spring Integration
         implementation 'org.springframework.boot:spring-boot-starter-integration'
 
@@ -103,6 +100,8 @@ project(':sns') {
     dependencies {
         implementation project(':core')
         implementation project(':query')
+        // sql
+        runtimeOnly 'com.mysql:mysql-connector-j'
     }
 }
 
@@ -113,6 +112,8 @@ project(':query') {
 
     dependencies {
         implementation project(':core')
+        // sql
+        runtimeOnly 'com.mysql:mysql-connector-j'
     }
 }
 

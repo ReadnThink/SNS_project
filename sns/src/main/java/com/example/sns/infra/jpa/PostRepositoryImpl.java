@@ -33,19 +33,6 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public void deleteAll() {
-        entityManager.createQuery("delete from Post");
-    }
-
-    @Override
-    public List<Post> findAll(final Pageable pageable) {
-        return entityManager.createQuery("select p from Post p order by p.createdAt desc")
-                .setFirstResult(pageable.getPageNumber())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
-    }
-
-    @Override
     public void delete(final Post post) {
         entityManager.remove(post);
     }

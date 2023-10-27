@@ -1,24 +1,7 @@
+# core에 DB적용하면 하위 모듈에서 DB분산이 안됨.
+
 server:
   port: 8081
-
-spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    username : root
-    format_sql: true
-    use_sql_comments: true
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-    hiddenmethod:
-      filter:
-        enabled: true
 
 jwt:
   secret:
