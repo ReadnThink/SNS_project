@@ -10,9 +10,5 @@ import java.util.Optional;
 public interface CommentRepository {
     Optional<Comment> findById(CommentId id);
     Comment save(Comment comment);
-    void deleteAll();
-
-    List<Comment> findAll(final Pageable pageable);
-
     void delete(Comment comment);
 }

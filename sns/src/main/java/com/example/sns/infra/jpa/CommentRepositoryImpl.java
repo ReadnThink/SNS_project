@@ -5,11 +5,9 @@ import com.example.core.domain.comment.entity.Comment;
 import com.example.core.domain.comment.entity.CommentId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,20 +31,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public void deleteAll() {
-        entityManager.createQuery("delete from Comment");
-    }
-
-    @Override
     public void delete(final Comment comment) {
         entityManager.remove(comment);
-    }
-
-    @Override
-    public List<Comment> findAll(final Pageable pageable) {
-        return entityManager.createQuery("select c from Comment c ORDER BY c.createdAt desc")
-                .setFirstResult(pageable.getPageNumber())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
     }
 }

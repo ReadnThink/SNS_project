@@ -1,4 +1,4 @@
-package com.example.sns.application;
+package com.example.sns.application.post;
 
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostCreate;
 import com.example.core.domain.messaging.command.post.kafka.KafkaPostDelete;
@@ -14,11 +14,11 @@ import static com.example.core.domain.messaging.MassagingVO.*;
 
 @Slf4j
 @Service
-public class KafkaSendRouter {
+public class KafkaPostSendRouter {
     private final PostCreateProducer postCreateProducer;
     private final ObjectMapper om;
 
-    public KafkaSendRouter(final PostCreateProducer postCreateProducer, final ObjectMapper om) {
+    public KafkaPostSendRouter(final PostCreateProducer postCreateProducer, final ObjectMapper om) {
         this.postCreateProducer = postCreateProducer;
         this.om = om;
     }

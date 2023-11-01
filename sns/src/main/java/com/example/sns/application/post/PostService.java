@@ -1,4 +1,4 @@
-package com.example.sns.application;
+package com.example.sns.application.post;
 
 import com.example.core.config.aop.CommandAop;
 import com.example.core.domain.messaging.command.post.PostCreateMessage;

@@ -10,9 +10,5 @@ import java.util.Optional;
 public interface PostRepository {
     Optional<Post> findById(PostId id);
     Post save(Post post);
-    void deleteAll();
-
-    List<Post> findAll(final Pageable pageable);
-
     void delete(Post post);
 }
