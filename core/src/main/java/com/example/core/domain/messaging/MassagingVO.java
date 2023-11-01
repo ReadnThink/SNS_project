@@ -16,5 +16,5 @@ public class MassagingVO {
     public static final String EVENT_GATEWAY_COMMENT_GET_CHANNEL = "CommentResponse";
     public static final String EVENT_GATEWAY_COMMENT_CREATE_CHANNEL = "KafkaCommentCreate";
     public static final String EVENT_GATEWAY_COMMENT_EDIT_CHANNEL = "KafkaCommentEdit";
-    public static final String EVENT_GATEWAY_COMMENT_Delete_CHANNEL = "KafkaCommentDelete";
+    public static final String EVENT_GATEWAY_COMMENT_DELELTE_CHANNEL = "KafkaCommentDelete";
 }

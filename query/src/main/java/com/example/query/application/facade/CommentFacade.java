@@ -4,9 +4,11 @@ import com.example.core.domain.comment.dto.CommentResponse;
 import com.example.core.domain.comment.entity.Comment;
 import com.example.core.domain.comment.entity.CommentId;
 import com.example.core.domain.comment.exception.CommentNotFound;
+import com.example.core.domain.post.dto.PostResponse;
 import com.example.query.infra.jpa.CommentQueryRepositoryImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,8 +38,9 @@ public class CommentFacade {
         return commentQueryRepository.
                 findAll(PageRequest.of(
                         pageable.getPageNumber(),
-                        pageable.getPageSize()))
-                .stream()
+                        pageable.getPageSize(),
+                        pageable.getSortOr(Sort.by("createdAt").descending()))
+                ).stream()
                 .map(CommentResponse::new)
                 .collect(toList());
     }

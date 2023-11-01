@@ -25,6 +25,7 @@ public class KafkaCommentSendRouter {
         this.om = om;
     }
 
+    // todo send 중복 줄일 수 있지 않을까?
     @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_CREATE_CHANNEL)
     public void send(KafkaCommentCreate commentCreate) throws JsonProcessingException {
         log.info("Router : kafkaCommentCreate");
@@ -37,7 +38,7 @@ public class KafkaCommentSendRouter {
         commentCreateProducer.commentEdit(om.registerModule(new JavaTimeModule()).writeValueAsString(kafkaCommentEdit));
     }
 
-    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_Delete_CHANNEL)
+    @ServiceActivator(inputChannel = EVENT_GATEWAY_COMMENT_DELELTE_CHANNEL)
     public void send(KafkaCommentDelete kafkaCommentDelete) throws JsonProcessingException {
         log.info("Router : kafkaCommentDelete");
         commentCreateProducer.commentDelete(om.registerModule(new JavaTimeModule()).writeValueAsString(kafkaCommentDelete));

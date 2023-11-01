@@ -21,6 +21,7 @@ public class PostConsumer {
         this.om = om;
     }
 
+    // todo 중복 줄일 수 있지 않을까?
     @KafkaListener(topics = "post_create", groupId = "group_1")
     public void postCreate(String postCreate) throws JsonProcessingException {
         log.info("KafkaListener post_create-----------------------------------");

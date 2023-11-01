@@ -21,7 +21,6 @@ public class CommentQueryController {
         this.commentFacade = commentFacade;
     }
 
-    // todo StatusCode 상황에 맞게 설계하기
     @GetMapping("/comments/{commentId}")
     public ResponseEntity<ResponseDto<CommentResponse>> getComment(@ModelAttribute final CommentId commentId) {
         return ResponseEntity.ok(ResponseDto.success(commentFacade.get(commentId)));
